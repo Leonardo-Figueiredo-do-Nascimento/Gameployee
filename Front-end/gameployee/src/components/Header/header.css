@@ -1,0 +1,17 @@
+.header{
+    height: 10%;
+    width: 100%;
+    font-size: 20px;
+    color: white;
+    background-color: black;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center; 
+    padding: 10px;
+    /* flex-wrap: wrap; */
+}
+
+.buttons{
+    display: flex;
+    justify-content: flex-end;
+}
