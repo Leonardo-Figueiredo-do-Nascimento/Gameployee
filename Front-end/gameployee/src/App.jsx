@@ -1,14 +1,9 @@
-import './app.css'
+import {RouterProvider} from 'react-router-dom'
+import router from './router'
 
 function App() {
 
-  return (
-    <>
-      <div className="container">
-          <section></section>
-      </div>
-    </>
-  )
+  return <RouterProvider router={router}/>
 }
 
 export default App
