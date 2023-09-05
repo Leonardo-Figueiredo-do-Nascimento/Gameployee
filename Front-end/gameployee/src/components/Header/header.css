@@ -5,13 +5,33 @@
     color: white;
     background-color: black;
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-between;
     align-items: center; 
     padding: 10px;
     /* flex-wrap: wrap; */
 }
 
-.buttons{
+a{
+    padding-left: 10px;
+    color: inherit;
+    text-decoration: none;
+}
+
+.page-buttons{
+    padding-top: 15px;
+}
+
+.links{
+    color: white;
+    text-decoration: none;
+    padding: 20px;
+}
+.links:hover{
+    background-color: rgb(59, 56, 56);
+    transition: 0.5s;
+}
+
+.user-buttons{
     display: flex;
     justify-content: flex-end;
 }

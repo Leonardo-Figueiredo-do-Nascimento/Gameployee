@@ -1,12 +1,21 @@
+import {Link} from 'react-router-dom'
 import Button from '../Button'
 import './header.css'
 
 export default function Header(){
     return(
         <div className="header">
-            <h1>Gameployee</h1>
+            <a href='/'><h1>Gameployee</h1></a>
 
-            <div className="buttons">
+            <div className="page-buttons">
+                <Link to={"/Sobre-Nós"} className='links'>Sobre nós</Link>
+                <span>|</span>
+                <Link to={"/Desenvolvedores"} className='links'>Desenvolvedores</Link>
+                <span>|</span>
+                <Link to={"/Empresas"} className='links'>Empresas</Link>
+            </div>
+
+            <div className="user-buttons">
                 <Button title={'Login'}/>
                 <Button title={'Inscreva-se'}/>
             </div>
