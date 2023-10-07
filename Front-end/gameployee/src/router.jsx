@@ -3,6 +3,8 @@ import About from './pages/About us/About'
 import Companies from './pages/Companies/Companies'
 import Developers from './pages/Developers/Developers'
 import Home from './pages/Home/Home'
+import Login from './pages/Login/Login'
+import Register from './pages/Register/Register'
 
 const router = createBrowserRouter([
     {
@@ -20,6 +22,14 @@ const router = createBrowserRouter([
     {
         path: "/Desenvolvedores",
         element: <Developers/>
+    },
+    {
+        path: "/Login",
+        element: <Login/>
+    },
+    {
+        path: "/Cadastro",
+        element: <Register/>
     },
 ])
 
