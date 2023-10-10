@@ -5,6 +5,7 @@ import Developers from './pages/Developers/Developers'
 import Home from './pages/Home/Home'
 import Login from './pages/Login/Login'
 import Register from './pages/Register/Register'
+import Jobs from './pages/Jobs/Jobs'
 
 const router = createBrowserRouter([
     {
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
         path: "/Cadastro",
         element: <Register/>
     },
+    {
+        path: "/Vagas",
+        element: <Jobs/>
+    }
 ])
 
 export default router
