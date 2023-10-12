@@ -1,4 +1,13 @@
-.container{
+
+.content{
     height: 80%;
-    width: 100%;
+    text-align: center;
+}
+
+h2{
+    font-size: 50px;
+}
+
+p{
+    font-size: 25px;
 }

@@ -8,8 +8,6 @@ export default function Header(){
             <a href='/'><h1>Gameployee</h1></a>
 
             <div className="page-buttons">
-                <Link to={"/Sobre-Nós"} className='links'>Sobre nós</Link>
-                <span>|</span>
                 <Link to={"/Desenvolvedores"} className='links'>Desenvolvedores</Link>
                 <span>|</span>
                 <Link to={"/Empresas"} className='links'>Empresas</Link>

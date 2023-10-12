@@ -1,8 +1,7 @@
 import {Link} from 'react-router-dom'
-import Footer from '../../components/Footer/index.jsx'
 import Header from '../../components/Header/index.jsx'
 
-var url = "https://jooble.org/api/";
+/* var url = "https://jooble.org/api/";
 var key = "b0498e07-fce8-4b17-ad80-4492cdd330dd";
 var params = "{ keywords: 'game'}"
 
@@ -21,7 +20,7 @@ http.onreadystatechange = function() {
 	}
 }
 //Send request to the server
-http.send(params);
+http.send(params); */
 
 export default function Home(){
     return(
@@ -30,11 +29,10 @@ export default function Home(){
             <h1>Vagas</h1>
             <div className="container">
                 <section>
-                
+                    {}
                 </section>
             </div>
             
-            <Footer/>
         </>
     )
 }

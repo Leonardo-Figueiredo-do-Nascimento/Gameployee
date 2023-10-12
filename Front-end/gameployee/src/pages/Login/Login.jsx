@@ -1,6 +1,5 @@
 import "./Login.css" 
 import {Link} from 'react-router-dom'
-import Footer from '../../components/Footer/index.jsx'
 import Header from '../../components/Header/index.jsx'
 
 export default function Login(){
@@ -20,8 +19,6 @@ export default function Login(){
                     </form>
                 </div>
             </div>
-            
-            <Footer/>
         </>
     )
 }
