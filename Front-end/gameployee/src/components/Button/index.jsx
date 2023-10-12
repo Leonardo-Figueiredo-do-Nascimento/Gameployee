@@ -2,6 +2,9 @@ import './button.css'
 
 export default function Button(props){
     return(
-        <button>{props.title}</button>
+        <button onClick={()=>{
+            var url = props.to;
+            window.location.href = url;}
+        }>{props.title}</button>
     )
 }

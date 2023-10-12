@@ -14,8 +14,8 @@ export default function Header(){
             </div>
 
             <div className="user-buttons">
-                <Button title={'Login'}/>
-                <Button title={'Inscreva-se'}/>
+                <Button title={'Login'} to="/Login"/>
+                <Button title={'Inscreva-se'} to="/Cadastro"/>
             </div>
 
         </div>
