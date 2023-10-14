@@ -16,6 +16,7 @@ export default function Register(){
     return(
         <>
             <Header/>
+            <h3>Cadastre-se</h3>
             <div className='registro'>
                 <div className='perfis'>
                     <input type="radio" id="dev" value={dev} name="perfil" onChange={() => {
