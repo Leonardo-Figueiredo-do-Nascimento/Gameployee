@@ -7,6 +7,11 @@ class Desenvolvedor{
         this.senha = senha
     }
 
+    trabalhos = [];
+
+    adicionarTrabalho(arquivo) {
+        this.trabalhos.push(arquivo)
+    }
 }
 
 export default Empresa;
