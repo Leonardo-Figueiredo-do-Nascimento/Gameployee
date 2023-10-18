@@ -1,0 +1,35 @@
+#nome-usuario{
+    height: auto;
+    width: auto;
+    margin-top: 50px;
+    margin-left: 40%;
+    margin-bottom: 50px;
+}
+
+.dev-container{
+    height: auto;
+}
+
+.dev-content{
+    font-size: 20px;
+    margin-left: 5%;
+    margin-bottom: 20px;
+}
+
+#cargo{
+    font-size: 30px;
+    height: auto;
+    width: auto;
+    margin-left: 5%;
+    margin-bottom: 20px;
+}
+
+.trabalhos{
+    height: 100px;
+    width: 80%;
+    margin-left: 5%;
+    margin-bottom: 30px;
+    background-color: rgb(188, 185, 185);
+    border-radius: 10px;
+}
+

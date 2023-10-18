@@ -5,6 +5,8 @@ import Home from './pages/Home/Home'
 import Login from './pages/Login/Login'
 import Register from './pages/Register/Register'
 import Jobs from './pages/Jobs/Jobs'
+import User_Dev from './pages/User-Dev/User-Dev'
+import User_Companie from './pages/User-Companie/User-Companie'
 
 const router = createBrowserRouter([
     {
@@ -28,8 +30,16 @@ const router = createBrowserRouter([
         element: <Register/>
     },
     {
-        path: "/Vagas",
+        path: "/Usuario/Vagas",
         element: <Jobs/>
+    },
+    {
+        path: "/Usuario/Desenvolvedor",
+        element: <User_Dev/>
+    },
+    {
+        path: "/Usuario/Empresa",
+        element: <User_Companie/>
     }
 ])
 

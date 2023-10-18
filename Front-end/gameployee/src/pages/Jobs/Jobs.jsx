@@ -1,14 +1,14 @@
 import {Link} from 'react-router-dom'
-import Header from '../../components/Header/index.jsx'
+import Header from '../../components/Header User'
 
-/* var url = "https://jooble.org/api/";
+var url = "https://jooble.org/api/";
 var key = "b0498e07-fce8-4b17-ad80-4492cdd330dd";
 var params = "{ keywords: 'game'}"
 
 //create xmlHttpRequest object
 var http = new XMLHttpRequest();
 //open connection. true - asynchronous, false - synchronous
-http.open("POST", url + key, true);
+http.open("GET", url + key, true);
 
 //Send the proper header information
 http.setRequestHeader("Content-type", "application/json");
@@ -20,7 +20,15 @@ http.onreadystatechange = function() {
 	}
 }
 //Send request to the server
-http.send(params); */
+http.send(params); 
+
+/* const apiKey = 'b0498e07-fce8-4b17-ad80-4492cdd330dd';
+const url = `https://us.jooble.org/api/${apiKey}/`;
+const keywords = 'java';
+
+fetch(`${url}?keywords=${keywords}`)
+  .then(response => response.json())
+  .then(data => console.log(data)); */
 
 export default function Home(){
     return(
