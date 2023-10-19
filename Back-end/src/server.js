@@ -1,7 +1,11 @@
-const http = require("http")
+const express = require('express');
 
-const server = http.createServer((req,res)=>{})
+const server = express();
 
-server.listen(3000,()=>{
-    console.log("Servidor ativo")
+server.get('/Usuario/Vagas',(req,res) => {
+    res.send('<h1>Lista de vagas</h1>')
+})
+
+server.listen(5173,()=>{
+    console.log("Servidor conectado")
 })
