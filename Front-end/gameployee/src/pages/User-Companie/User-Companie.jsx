@@ -5,7 +5,7 @@ import './Companie.css'
 export default function User_Companie(){
 
     const [addVaga,setAddVaga] = useState(false)
-
+    const [data,setData] = useState()
 
     function postarVaga(){
         
