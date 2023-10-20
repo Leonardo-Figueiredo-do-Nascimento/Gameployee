@@ -1,0 +1,19 @@
+#candidatos-h1{
+    height: auto;
+    width: auto;
+    margin-top: 50px;
+    margin-left: 5%;
+    font-size: 50px;
+}
+
+.painel-escolhas-candidatos{
+    margin-top: 50px;
+    height: auto;
+    width: auto;  
+    margin-left: 25%; 
+}
+
+.opcoes-candidatos{
+    width: auto;
+    margin-left: 50px;
+}
