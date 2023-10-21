@@ -31,19 +31,19 @@ const router = createBrowserRouter([
         element: <Register/>
     },
     {
-        path: "/Usuario/Vagas",
+        path: "/Usuario/Desenvolvedor/:devId/:devName/Vagas",
         element: <Jobs/>
     },
     {
-        path: "/Usuario/Desenvolvedor",
+        path: "/Usuario/Desenvolvedor/:devId/:devName",
         element: <User_Dev/>
     },
     {
-        path: "/Usuario/Empresa",
+        path: "/Usuario/Empresa/:companieId/:companieName",
         element: <User_Companie/>
     },
     {
-        path:"/Usuario/Candidatos",
+        path:"/Usuario/Empresa/:companieId/:companieName/Candidatos",
         element: <Candidates/>
     }
 ])

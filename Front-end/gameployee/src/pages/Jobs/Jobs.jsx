@@ -38,18 +38,18 @@ export default function Jobs(){
             <h1 id='vagas-h1'>Vagas</h1>
             <div className='painel-escolhas-vagas'>
                 <input className='opcoes-vagas' type="radio" id="carreira1" name="carreira" value="programador"/>
-                <label for="contactChoice1">Programador</label>
+                <label>Programador</label>
         
                 <input className='opcoes-vagas' type="radio" id="carreira2" name="carreira" value="designer" />
-                <label for="contactChoice2">Designer</label>
+                <label>Designer</label>
         
                 <input className='opcoes-vagas' type="radio" id="carreira3" name="carreira" value="artista 3D" />
-                <label for="contactChoice3">Artista 3D</label>
+                <label>Artista 3D</label>
                 
                 <input className='opcoes-vagas' type="radio" id="carreira4" name="carreira" value="animador" />
-                <label for="contactChoice3">Animador</label>
+                <label>Animador</label>
             </div>
-            <div className="container">
+            <div className="container-vagas">
                 <section>
                     {}
                 </section>

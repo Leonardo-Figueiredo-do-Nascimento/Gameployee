@@ -64,10 +64,9 @@ form input[type="submit"]:active{
     height: auto;
 }
 
-h3{
+#h3Area{
     font-size: 50px;
     height: auto;
     margin-top: 40px;
     width: auto;
-    margin-left: 38%;
 }

@@ -1,9 +1,11 @@
 import { useState } from "react";
+import { useParams } from "react-router-dom";
 import Header from "../../components/Header Companie";
 import './Companie.css'
 
 export default function User_Companie(){
 
+    const {companieId, companieName} = useParams()
     const [addVaga,setAddVaga] = useState(false)
     const [data,setData] = useState()
 
@@ -14,7 +16,7 @@ export default function User_Companie(){
     return(
         <>
             <Header/>
-            <h1 id="nome-empresa">USER Companie</h1>
+            <h1 id="nome-empresa">{companieName}</h1>
             <div className="empresa-container">
                 <p className="visible-elements">Suas Vagas:</p>
                 <section className="painel-vagas">

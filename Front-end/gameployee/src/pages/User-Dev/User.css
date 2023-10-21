@@ -11,6 +11,7 @@
 }
 
 .dev-content{
+    width: auto;
     font-size: 20px;
     margin-left: 5%;
     margin-bottom: 20px;
@@ -26,7 +27,7 @@
 
 .trabalhos{
     height: 100px;
-    width: 80%;
+    width: 90%;
     margin-left: 5%;
     margin-bottom: 30px;
     background-color: rgb(188, 185, 185);

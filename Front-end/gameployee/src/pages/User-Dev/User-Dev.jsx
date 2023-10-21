@@ -1,9 +1,11 @@
 import Header from "../../components/Header User";
+import { useParams } from "react-router-dom";
 import { useState } from "react";
 import "./User.css"
 
 export default function User_Dev(){
   
+    const {devId, devName} = useParams()
     const [fileSelected, setFileSelected] = useState(false);
 
     const handleFileChange = () => {
@@ -17,7 +19,7 @@ export default function User_Dev(){
     return(
         <>
             <Header/>
-            <h1 id="nome-usuario">USER NAME</h1>
+            <h1 id="nome-usuario">{devName}</h1>
             <h2 id="cargo">Ocupação: Cargo</h2>
 
             <div className="dev-container">
@@ -26,7 +28,7 @@ export default function User_Dev(){
                     
                 </div>
                 <form onSubmit={handleSubmit}>
-                    <label className="dev-content" for="imagem">Selecione um arquivo:</label> <br/>
+                    <label className="dev-content">Selecione um arquivo:</label> <br/>
                     <input id='file-input' type="file"  name="file" onChange={handleFileChange}/>
 
                     {fileSelected && (
