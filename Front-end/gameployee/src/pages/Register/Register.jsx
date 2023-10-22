@@ -1,7 +1,7 @@
 import {Link} from 'react-router-dom'
 import Header from '../../components/Header/index.jsx'
 import './Register.css'
-import { useState } from 'react'
+import { useState , useEffect } from 'react'
 
 
 export default function Register(){
@@ -16,22 +16,38 @@ export default function Register(){
     const [senha,setSenha] = useState('')
     const [telefone,setTelefone] = useState('')
     const [dados,setDados] = useState({})
-
-
-    const cadastrar = (e) => {
-        e.preventDefault()
-
-        if(dev == true && nome != '' && email != '' && senha != '' && cargo != '' && telefone != ''){
-
-            setDados({
-                usuario:{
+    
+    useEffect(() => {
+        setDados(() => {
+          if (dev || companie) {
+            if (dev) {
+              return {
+                usuario: {
                     nome: nome,
                     email: email,
                     senha: senha,
                     cargo: cargo,
                     telefone: telefone
-                }
-            })
+                },
+              };
+            } else {
+              return {
+                empresa: {
+                    nome: nome,
+                    email: email,
+                    senha: senha
+                },
+              };
+            }
+          }
+        });
+      }, [dev, companie, email, senha,cargo,telefone]);
+
+    const cadastrar = (e) => {
+        e.preventDefault()
+    
+
+        if(dev == true && nome != '' && email != '' && senha != '' && cargo != '' && telefone != ''){
 
             const dadosUsuario = JSON.stringify(dados)
 
@@ -39,22 +55,14 @@ export default function Register(){
 
         } else if(companie && nome != '' && email != '' && senha != ''){
 
-           setDados({
-               empresa:{
-                   nome: nome,
-                   email: email,
-                   senha: senha
-               }
-           })
+           
+            const dadosEmpresa = JSON.stringify(dados)
 
-
-            const dadosUsuario = JSON.stringify(dados)
-
-            console.log(dadosUsuario)
+            console.log(dadosEmpresa)
 
 
         }else{
-            alert('preencha os dados para se cadastrar')
+            alert('Preencha os dados para se cadastrar')
             return;
         }
     }
