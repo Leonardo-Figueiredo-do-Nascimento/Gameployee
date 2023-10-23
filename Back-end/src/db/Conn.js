@@ -1,6 +1,6 @@
-const { Client } = require('pg');
+const { Client , Pool } = require('pg');
 
-const client = new Client({
+/* const client = new Client({
     host: 'localhost',
     user: 'postgres',
     port: 5432,
@@ -20,6 +20,26 @@ function conectar(){
         }
         client.end();
     })
-}
+} */
 
-conectar()
+const dbConfig = {
+    user: 'postgres',
+    host: 'localhost',
+    port: 5432,
+    password:"aranha2001",
+    database: 'Gameployee'
+};
+  
+  // Função que cria e retorna um pool de conexões
+function criarPool() {
+    const pool = new Pool(dbConfig);
+    return pool;
+}
+  
+const pool = criarPool();
+
+
+ module.exports = {
+    criarPool,
+};
+ 

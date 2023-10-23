@@ -131,7 +131,7 @@ export default function Register(){
                                 <label>Animador</label>
                             </div>
                             <label>Telefone:</label>
-                            <input type={'text'} id='cellnumber' value={telefone} onChange={(e)=> setTelefone(e.target.value)}></input>
+                            <input type={'text'} id='cellnumber' maxLength={20} value={telefone} onChange={(e)=> setTelefone(e.target.value)}></input>
                         </>
                     ) : null}
 
