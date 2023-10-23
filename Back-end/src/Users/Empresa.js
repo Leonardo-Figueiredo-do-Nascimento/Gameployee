@@ -1,6 +1,6 @@
 class Empresa{
     constructor(nome,email,senha){
-        this.id = Math.random(),
+        this.id = Math.floor(Math.random() * (10000 - 10 + 1)) + 10,
         this.nome = nome,
         this.email = email,
         this.senha = senha
@@ -13,4 +13,4 @@ class Empresa{
     }
 }
 
-export default Empresa;
+module.exports = Empresa

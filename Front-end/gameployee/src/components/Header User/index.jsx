@@ -4,16 +4,16 @@ import './header.css'
 
 export default function Header(){
     
-    const {devId, devName} = useParams()
+    const {devId, devName,devCargo} = useParams()
     
     return(
         <div className="header">
             <a href='/'><h1>Gameployee</h1></a>
 
             <div className="page-buttons">
-                <Link to={`/Usuario/Desenvolvedor/${devId}/${devName}`} className='links'>Meu Perfil</Link>
+                <Link to={`/Usuario/Desenvolvedor/${devId}/${devName}/${devCargo}`} className='links'>Meu Perfil</Link>
                 <span>|</span>
-                <Link to={`/Usuario/Desenvolvedor/${devId}/${devName}/Vagas`} className='links'>Vagas</Link>
+                <Link to={`/Usuario/Desenvolvedor/${devId}/${devName}/${devCargo}/Vagas`} className='links'>Vagas</Link>
             </div>
 
             <div className="user-buttons">

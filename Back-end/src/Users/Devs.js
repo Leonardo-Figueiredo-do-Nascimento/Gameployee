@@ -1,10 +1,11 @@
 class Desenvolvedor{
-    constructor(nome,cargo,email,senha){
-        this.id = Math.random(),
+    constructor(nome,cargo,email,senha,telefone){
+        this.id = Math.floor(Math.random() * (10000 - 10 + 1)) + 10,
         this.nome = nome,
         this.cargo = cargo,
         this.email = email,
-        this.senha = senha
+        this.senha = senha,
+        this.telefone = telefone
     }
 
     trabalhos = [];
@@ -14,4 +15,4 @@ class Desenvolvedor{
     }
 }
 
-export default Empresa;
+module.exports = Desenvolvedor

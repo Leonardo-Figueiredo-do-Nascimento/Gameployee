@@ -5,7 +5,7 @@ import "./User.css"
 
 export default function User_Dev(){
   
-    const {devId, devName} = useParams()
+    const {devId, devName, devCargo} = useParams()
     const [fileSelected, setFileSelected] = useState(false);
 
     const handleFileChange = () => {
@@ -20,7 +20,7 @@ export default function User_Dev(){
         <>
             <Header/>
             <h1 id="nome-usuario">{devName}</h1>
-            <h2 id="cargo">Ocupação: Cargo</h2>
+            <h2 id="cargo">Ocupação: {devCargo}</h2>
 
             <div className="dev-container">
                 <p className="dev-content">Seus Trabalhos:</p>

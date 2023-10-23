@@ -33,54 +33,52 @@ export default function Login(){
         });
       }, [dev, companie, email, senha]);
     
-    const logar = (e) => {
+    const logar = async (e) => {
         e.preventDefault();
 
         if ((dev || companie) && email !== '' && senha !== '') {
         
-            const dadosUsuario = JSON.stringify(dados);
-            console.log(dadosUsuario);
-            
+            if(dev){
+                const dadosUsuario = JSON.stringify(dados);
+                console.log(dadosUsuario);
+            }
+            else if(companie){
+                const dadosEmpresa = JSON.stringify(dados);
+                console.log(dadosEmpresa);
+            }
+                        
         } else {
-            alert('Preencha os dados para se cadastrar');
+            alert('Preencha os dados para se logar');
+        }
+
+        try {
+            const response = await fetch('http://localhost:3000/Login', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(dados),
+            });
+      
+            if (response.ok) {
+                const dadosResposta = await response.json()
+                
+                console.log('Dados enviados com sucesso!');
+
+                if(dadosResposta.usuario){
+                    window.location.href = `http://localhost:5173/Usuario/Desenvolvedor/${dadosResposta.id}/${dadosResposta.nome}/${dadosResposta.cargo}`
+                } else if(dadosResposta.empresa){
+                    window.location.href = `http://localhost:5173/Usuario/Empresa/${dadosResposta.id}/${dadosResposta.nome}`
+                }
+            } else {
+              console.error('Falha ao enviar os dados.');
+            }
+          } catch (error) {
+            console.error('Erro ao enviar os dados:', error);
         }
     }
 
-    /* const logar = (e) =>{
-        e.preventDefault()
-        if(dev == true && email != '' && senha != ''){
-
-            setDados({
-                usuario:{
-                    email: email,
-                    senha: senha,
-                }
-            })
-
-            const dadosUsuario = JSON.stringify(dados)
-
-            console.log(dadosUsuario)
-
-        } else if(companie && email != '' && senha != ''){
-
-            setDados({
-               empresa:{
-                   email: email,
-                   senha: senha
-               }
-            })
-
-            const dadosUsuario = JSON.stringify(dados)
-
-            console.log(dadosUsuario)
-
-
-        }else{
-            alert('Preencha os dados para se cadastrar')
-            return;
-        }
-    } */
-
+    
     return(
         <>
             <Header/>

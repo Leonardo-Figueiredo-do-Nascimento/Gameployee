@@ -41,9 +41,9 @@ export default function Register(){
             }
           }
         });
-      }, [dev, companie, email, senha,cargo,telefone]);
+    }, [dev, companie, email, senha,cargo,telefone]);
 
-    const cadastrar = (e) => {
+    const cadastrar = async (e) => {
         e.preventDefault()
     
 
@@ -60,11 +60,35 @@ export default function Register(){
 
             console.log(dadosEmpresa)
 
-
         }else{
             alert('Preencha os dados para se cadastrar')
             return;
         }
+
+        try {
+            const response = await fetch('http://localhost:3000/Cadastro', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(dados),
+            });
+      
+            if (response.ok) {
+                const dadosResposta = await response.json()
+                console.log('Dados enviados com sucesso!');
+                if(dadosResposta.usuario){
+                    window.location.href = `http://localhost:5173/Usuario/Desenvolvedor/${dadosResposta.id}/${dadosResposta.nome}/${dadosResposta.cargo}`
+                } else if(dadosResposta.empresa){
+                    window.location.href = `http://localhost:5173/Usuario/Empresa/${dadosResposta.id}/${dadosResposta.nome}`
+                }
+            } else {
+              console.error('Falha ao enviar os dados.');
+            }
+          } catch (error) {
+            console.error('Erro ao enviar os dados:', error);
+        }
+
     }
 
     return(
@@ -94,16 +118,16 @@ export default function Register(){
                         <>
                             <h id='h3Area'>Sua área de atuação: </h>
                             <div className='carreiras'>
-                                <input type="radio" id="carreira1" name="carreira" value="programador" onChange={(e)=> setCargo("programador")} required/>
+                                <input type="radio" id="carreira1" name="carreira" value="Programador" onChange={(e)=> setCargo("Programador")} required/>
                                 <label>Programador</label>
                         
-                                <input type="radio" id="carreira2" name="carreira" value="designer" onChange={(e)=> setCargo("designer")}/>
+                                <input type="radio" id="carreira2" name="carreira" value="Designer" onChange={(e)=> setCargo("Designer")}/>
                                 <label>Designer</label>
                         
-                                <input type="radio" id="carreira3" name="carreira" value="artista 3D" onChange={(e)=> setCargo("artista 3D")}/>
+                                <input type="radio" id="carreira3" name="carreira" value="Artista 3D" onChange={(e)=> setCargo("Artista 3D")}/>
                                 <label>Artista 3D</label>
                                 
-                                <input type="radio" id="carreira4" name="carreira" value="animador" onChange={(e)=> setCargo("animador")}/>
+                                <input type="radio" id="carreira4" name="carreira" value="Animador" onChange={(e)=> setCargo("Animador")}/>
                                 <label>Animador</label>
                             </div>
                             <label>Telefone:</label>
