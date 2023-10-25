@@ -30,11 +30,11 @@ function inserirEmpresa(novaEmpresa){
 }
 
 
-/* async function main(){
+async function main(){
         const dadosEmpresas = await buscarEmpresas();
-        console.log(dadosEmpresas);
+        console.log(dadosEmpresas)
 }
 
-main() */
+main()
 
 module.exports = {buscarEmpresas, inserirEmpresa}

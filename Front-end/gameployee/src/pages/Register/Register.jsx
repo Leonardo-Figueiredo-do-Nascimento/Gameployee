@@ -41,7 +41,7 @@ export default function Register(){
             }
           }
         });
-    }, [dev, companie, email, senha,cargo,telefone]);
+    }, [dev, companie, email, nome, senha,cargo,telefone]);
 
     const cadastrar = async (e) => {
         e.preventDefault()
@@ -64,7 +64,7 @@ export default function Register(){
             alert('Preencha os dados para se cadastrar')
             return;
         }
-
+        
         try {
             const response = await fetch('http://localhost:3000/Cadastro', {
                 method: 'POST',
@@ -74,20 +74,46 @@ export default function Register(){
                 body: JSON.stringify(dados),
             });
       
-            if (response.ok) {
-                const dadosResposta = await response.json()
+            const dadosResposta = await response.json()
+            
+            if (response.status===200) {
                 console.log('Dados enviados com sucesso!');
                 if(dadosResposta.usuario){
                     window.location.href = `http://localhost:5173/Usuario/Desenvolvedor/${dadosResposta.id}/${dadosResposta.nome}/${dadosResposta.cargo}`
                 } else if(dadosResposta.empresa){
                     window.location.href = `http://localhost:5173/Usuario/Empresa/${dadosResposta.id}/${dadosResposta.nome}`
                 }
-            } else {
-              console.error('Falha ao enviar os dados.');
+            } else if(response.status===409){
+              alert(response.message);
             }
-          } catch (error) {
-            console.error('Erro ao enviar os dados:', error);
-        }
+
+            } catch (error) {
+              console.error('Erro ao enviar os dados:', error);
+            }
+        
+        /* fetch('http://localhost:3000/Cadastro', {
+            method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(dados),
+            }).then(resposta =>{
+                if(resposta.status===409){
+                    alert(resposta.error);
+                    return;
+                } else if(resposta.status===200){
+                    console.log('STATUS = ' + resposta.status);
+                    if(resposta.usuario){
+                        window.location.href = `http://localhost:5173/Usuario/Desenvolvedor/${resposta.id}/${resposta.nome}/${resposta.cargo}`
+                    } else if(resposta.empresa){
+                        window.location.href = `http://localhost:5173/Usuario/Empresa/${resposta.id}/${resposta.nome}`
+                    }
+                } else{
+                    alert('Erro desconhecido: ',resposta.status, resposta)
+                    return;
+                }
+            }) */
+        
 
     }
 
