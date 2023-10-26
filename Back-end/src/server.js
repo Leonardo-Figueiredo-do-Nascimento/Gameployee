@@ -2,8 +2,8 @@ const Desenvolvedor = require('./Users/Devs.js');
 const Empresa = require('./Users/Empresa.js');
 /* const multer = require('multer');
 const path = require('path'); */
-const { buscarDesenvolvedores, inserirDesenvolvedor } = require('./db/UsuarioDAO.js')
-const { buscarEmpresas, inserirEmpresa } = require('./db/EmpresaDAO.js')
+const { buscarDesenvolvedores, inserirDesenvolvedor, logarDev , buscarTrabalhos, inserirTrabalho} = require('./db/UsuarioDAO.js')
+const { buscarEmpresas, inserirEmpresa, buscarVagas , inserirVaga, logarEmpresa } = require('./db/EmpresaDAO.js')
 const express = require('express');
 const cors = require('cors')
 const server = express();
@@ -24,7 +24,6 @@ server.use(express.json())
   
   const upload = multer({ storage }); */
   
-
 server.post('/Cadastro',(req,res)=>{
     const data = req.body;
     console.log('Dados recebidos no servidor:', data); 
@@ -32,30 +31,32 @@ server.post('/Cadastro',(req,res)=>{
     if(data.usuario){
         const {nome,email,senha,cargo,telefone} = data.usuario
         const novoUsuario = new Desenvolvedor(nome,cargo,email,senha,telefone)
-        try{
-            inserirDesenvolvedor(novoUsuario)
-            console.log('Novo usuario criado: ',novoUsuario)
-            res.status(200).json({ message: 'Usuário criado com sucesso', usuario: novoUsuario, id: novoUsuario.id, nome: novoUsuario.nome, cargo: novoUsuario.cargo });
-        }catch(error){
-            console.log(error)
-            res.status(409).json({message: 'Usuario ou email já existentes'})
-        }
         
-    }else 
-    if(data.empresa){
+        inserirDesenvolvedor(novoUsuario,(err)=>{
+            if(err){
+                console.log("Erro ao enviar os dados = " + err.message)
+                res.status(409).json({error: 'Usuario ou email já existentes'})
+            } else{
+                console.log('Novo usuario criado: ',novoUsuario)
+                res.status(200).json({ message: 'Usuário criado com sucesso', usuario: novoUsuario, id: novoUsuario.id, nome: novoUsuario.nome, cargo: novoUsuario.cargo });
+            }
+        })
+    }else if(data.empresa)
+    {
         const {nome,email,senha} = data.empresa
         const novaEmpresa = new Empresa(nome,email,senha)
 
-        try{
-            inserirEmpresa(novaEmpresa)
-            console.log("Nova empresa criada: ",novaEmpresa)
-            res.status(200).json({ message: 'Empresa criada com sucesso', empresa: novaEmpresa, id: novaEmpresa.id, nome: novaEmpresa.nome });
-        }catch (error){
-            console.log(error)
-            res.status(409).json({error: 'Usuario ou email já existentes'})
-        }
-
-
+        inserirEmpresa(novaEmpresa, (err)=>{
+            if(err){
+                console.log("Erro ao enviar os dados = " + err.message);
+                res.status(409).json({ error: 'Usuario ou email já existentes' });
+            } else{
+                console.log('DADOS ENVIADOS');
+                console.log("Nova empresa criada: ", novaEmpresa);
+                res.status(200).json({ message: 'Empresa criada com sucesso', empresa: novaEmpresa, id: novaEmpresa.id, nome: novaEmpresa.nome });
+        
+            }
+        })
     } else{
         res.status(400).json({ message: 'Requisição invalida' });
     }
@@ -68,21 +69,61 @@ server.post('/Login',(req,res)=>{
     console.log('Dados recebidos no servidor:', data);  
     
     if(data.usuario){
-        const {nome,email,senha,cargo,telefone} = data.usuario
-        const novoUsuario = new Desenvolvedor(nome,cargo,email,senha,telefone)
-        console.log('Novo usuario criado: ',novoUsuario)
-        res.status(200).json({ message: 'Login com sucesso', usuario: novoUsuario, id: novoUsuario.id, nome: novoUsuario.nome, cargo: novoUsuario.cargo });
+        const {nome,email,senha} = data.usuario
+        const usuarioLogado = new Desenvolvedor(nome,email,senha)
+
+        console.log('Login de usuario bem sucedido')
+        res.status(200).json({ message: 'Login com sucesso', usuario: usuarioLogado, id: usuarioLogado.id, nome: usuarioLogado.nome, cargo: usuarioLogado.cargo });
     }else 
     if(data.empresa){
-        const {nome,email,senha} = data.empresa
-        const novaEmpresa = new Empresa(nome,email,senha)
-        console.log("Nova empresa criada: ",novaEmpresa)
-        res.status(200).json({ message: 'Login com sucesso', empresa: novaEmpresa, id: novaEmpresa.id, nome: novaEmpresa.nome });
+        const {email,senha} = data.empresa
+
+        logarEmpresa(email,senha, async (err,result)=>{
+            if(err){
+                console.log("Login rejeitado: " + err.message);
+                res.status(400).json({ error: 'Email ou senha incorretos ou inexistentes' });
+            }else{
+                const dadosEmpresa = await result.rows
+                console.log(dadosEmpresa[0])
+                console.log(dadosEmpresa[0].id_empresa)
+                console.log(dadosEmpresa[0].nome_empresa)
+                console.log("Login de empresa bem sucedido")
+                res.status(200).json({ message: 'Login com sucesso', empresa: dadosEmpresa[0], id: dadosEmpresa[0].id_empresa, nome: dadosEmpresa[0].nome_empresa });
+            }
+        })
     } else{
-        res.status(400).json({ message: 'Email ou senha incorretos' });
+        res.status(400).json({ message: 'Requisição invalida' });
     }
 })
 
+/* (err)=>{
+            if(err){
+                console.log("Login rejeitado: " + err.message);
+                res.status(400).json({ error: 'Email ou senha incorretos ou inexistentes' });           
+            } else{
+                console.log("Login de empresa bem sucedido")
+                res.status(200).json({ message: 'Login com sucesso', empresa: empresaLogada, id: empresaLogada.id, nome: empresaLogada.nome });
+            }
+
+        } */
+
+server.post('/Postar Vaga', (req, res) => {
+    const data = req.body
+    console.log('Dados recebidos no servidor:', data);
+    res.send('Dados recebidos com sucesso');
+
+});
+
+
+// GET das vagas da Empresa local 
+server.get('/Vagas da empresa',(req,res)=>{
+
+})
+
+// GET de CANDIDATOS
+/* server.get('/Candidatos',(req,res)=>{
+    const data = req.body
+}) */
 
 // POST DE TRABALHOS DO USUARIO
 /* server.post('/Trabalho', upload.single('file'), (req, res) => {

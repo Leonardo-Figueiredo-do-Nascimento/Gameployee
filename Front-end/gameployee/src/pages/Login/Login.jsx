@@ -5,33 +5,29 @@ import { useState , useEffect } from "react"
 
 export default function Login(){
 
-    const [dev,setDev] = useState(false)
-    const [companie,setCompanie] = useState(false)
-    const [email,setEmail] = useState('')
-    const [senha,setSenha] = useState('')
-    const [dados,setDados] = useState({})
+  const [dev,setDev] = useState(false)
+  const [companie,setCompanie] = useState(false)
+  const [email,setEmail] = useState('')
+  const [senha,setSenha] = useState('')
+  const [dadosLogin,setDadosLogin] = useState({})
 
-    useEffect(() => {
-        setDados(() => {
-          if (dev || companie) {
-            if (dev) {
-              return {
-                usuario: {
-                  email: email,
-                  senha: senha,
-                },
-              };
-            } else {
-              return {
-                empresa: {
-                  email: email,
-                  senha: senha,
-                },
-              };
-            }
-          }
-        });
-      }, [dev, companie, email, senha]);
+  useEffect(() => {
+      setDadosLogin(() => {
+        if (dev || companie) {
+          if (dev) {
+            return {
+              usuario: {
+                email: email,
+                senha: senha,
+              },
+            };
+          } else {
+            return {
+              empresa: {
+                email: email,
+                senha: senha,
+              },
+  }}}});}, [dev, companie, email, senha]);
     
     const logar = async (e) => {
         e.preventDefault();
@@ -39,16 +35,17 @@ export default function Login(){
         if ((dev || companie) && email !== '' && senha !== '') {
         
             if(dev){
-                const dadosUsuario = JSON.stringify(dados);
+                const dadosUsuario = JSON.stringify(dadosLogin);
                 console.log(dadosUsuario);
             }
             else if(companie){
-                const dadosEmpresa = JSON.stringify(dados);
+                const dadosEmpresa = JSON.stringify(dadosLogin);
                 console.log(dadosEmpresa);
             }
                         
         } else {
             alert('Preencha os dados para se logar');
+            return
         }
 
         try {
@@ -57,11 +54,12 @@ export default function Login(){
                 headers: {
                   'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(dados),
+                body: JSON.stringify(dadosLogin),
             });
       
-            if (response.ok) {
-                const dadosResposta = await response.json()
+            const dadosResposta = await response.json()
+            
+            if (response.status === 200) {
                 
                 console.log('Dados enviados com sucesso!');
 
@@ -70,10 +68,10 @@ export default function Login(){
                 } else if(dadosResposta.empresa){
                     window.location.href = `http://localhost:5173/Usuario/Empresa/${dadosResposta.id}/${dadosResposta.nome}`
                 }
-            } else {
-              console.error('Falha ao enviar os dados.');
+            } else if(response.status===400){
+              alert('Usuario e email incorretos ou inexistentes');
             }
-          } catch (error) {
+        }catch (error) {
             console.error('Erro ao enviar os dados:', error);
         }
     }

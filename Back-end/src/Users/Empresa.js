@@ -4,9 +4,9 @@ class Empresa{
         this.nome = nome,
         this.email = email,
         this.senha = senha
+        this.vagas = []; 
     }
 
-    vagas = [];
 
     adicionarVaga(titulo,cargo,descrição,país) {
         this.vagas.push({titulo,cargo,descrição,país})

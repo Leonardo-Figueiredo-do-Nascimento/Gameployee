@@ -64,7 +64,7 @@ export default function Register(){
             alert('Preencha os dados para se cadastrar')
             return;
         }
-        
+
         try {
             const response = await fetch('http://localhost:3000/Cadastro', {
                 method: 'POST',
@@ -84,37 +84,12 @@ export default function Register(){
                     window.location.href = `http://localhost:5173/Usuario/Empresa/${dadosResposta.id}/${dadosResposta.nome}`
                 }
             } else if(response.status===409){
-              alert(response.message);
+              alert('Usuario e email invalidos ou já existentes');
             }
 
             } catch (error) {
               console.error('Erro ao enviar os dados:', error);
             }
-        
-        /* fetch('http://localhost:3000/Cadastro', {
-            method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(dados),
-            }).then(resposta =>{
-                if(resposta.status===409){
-                    alert(resposta.error);
-                    return;
-                } else if(resposta.status===200){
-                    console.log('STATUS = ' + resposta.status);
-                    if(resposta.usuario){
-                        window.location.href = `http://localhost:5173/Usuario/Desenvolvedor/${resposta.id}/${resposta.nome}/${resposta.cargo}`
-                    } else if(resposta.empresa){
-                        window.location.href = `http://localhost:5173/Usuario/Empresa/${resposta.id}/${resposta.nome}`
-                    }
-                } else{
-                    alert('Erro desconhecido: ',resposta.status, resposta)
-                    return;
-                }
-            }) */
-        
-
     }
 
     return(

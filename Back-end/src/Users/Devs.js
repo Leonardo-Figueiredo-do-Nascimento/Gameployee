@@ -1,5 +1,5 @@
 class Desenvolvedor{
-    constructor(nome,cargo,email,senha,telefone){
+    constructor(nome,email,senha,cargo,telefone){
         this.id = Math.floor(Math.random() * (10000 - 10 + 1)) + 10,
         this.nome = nome,
         this.cargo = cargo,
