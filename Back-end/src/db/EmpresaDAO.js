@@ -35,16 +35,23 @@ function inserirEmpresa(novaEmpresa, callback){
     })
 }
 
-function inserirVaga(novaVaga){
+function inserirVaga(novaVaga,callback){
     const query = 'INSERT INTO tb_vagas_empresas(id_vaga,titulo, cargo, descrição,nome_empresa) VALUES ($1,$2,$3,$4,$5)'
-    pool.query(query,[novaVaga.id,novaVaga.nome,novaVaga.email,novaVaga.senha],(err,res)=>{
-        if(!err){
-            console.log('Envio de dados feito')
+    pool.query(query,[novaVaga.id,novaVaga.titulo,novaVaga.cargo,novaVaga.descricao,novaVaga.nome_empresa],(err,res)=>{
+        if(err){
+            callback(err)
 
         } else{
-            console.log(err.message)
+            callback(null)
         }
     })
+}
+
+async function buscarVagasLocais(nome_empresa,callback){
+    const query = 'SELECT titulo,cargo,descrição FROM tb_vagas_empresas '+
+                  'LEFT JOIN tb_empresas ON tb_vagas_empresas.nome_empresa = tb_empresas.nome_empresa '+
+                  'WHERE tb_vagas_empresas.nome_empresa = $1'
+    pool.query(query,[nome_empresa],callback)
 }
 
 async function buscarVagas(){
@@ -60,4 +67,4 @@ async function buscarVagas(){
 }
 
 
-module.exports = {buscarEmpresas, inserirEmpresa , buscarVagas , inserirVaga, logarEmpresa}
+module.exports = {buscarEmpresas, inserirEmpresa , buscarVagas, buscarVagasLocais , inserirVaga, logarEmpresa}

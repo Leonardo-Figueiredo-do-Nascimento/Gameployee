@@ -12,21 +12,38 @@ export default function User_Companie(){
     const [cargo,setCargo] = useState()
     const [descriçãoVaga,setDescriçãoVaga] = useState()
     const [vaga,setVaga] = useState()
+    const [vagas,setVagas] = useState([])
 
     useEffect(() => {
-            setVaga(
-                {
-                    titulo: tituloVaga,
-                    cargo: cargo,
-                    descrição: descriçãoVaga
-                }
-            )
-        }, [ tituloVaga,cargo,descriçãoVaga]);
+            setVaga(()=> {
+                return{
+                    vaga:{
+                        titulo: tituloVaga,
+                        cargo: cargo,
+                        descrição: descriçãoVaga,
+                        nome_empresa: companieName
+                    }
+                    
+                }})}
+    , [ tituloVaga,cargo,descriçãoVaga,companieName]);
+
+    useEffect(()=>{
+        async function getData(){
+            const response = await fetch(`http://localhost:3000/Vagas_da_empresa/${companieName}`)
+            const data = await response.json() 
+            setVagas(data.dadosVagas)       
+        };
+        getData()
+    },[])
+    
+    useEffect(()=>{
+        console.log(vagas)
+    },[vagas])
 
     const postarVaga = async (e) => {
         e.preventDefault()
 
-        axios.post('/Postar Vaga',vaga)
+        axios.post('http://localhost:3000/Postar_Vaga',vaga)
         .then(response => {
             console.log(response.data)
         })
@@ -44,7 +61,15 @@ export default function User_Companie(){
                 <p className="visible-elements">Suas Vagas:</p>
                 <section className="painel-vagas">
                     {
-                        
+            
+                        vagas.map((vaga,index)=>{
+                            return (
+                            <div className="vaga-renderizada" key={index}>
+                                <p id="p-titulo-vaga">{vaga.titulo}</p>
+                                <p id="p-cargo-vaga">{vaga.cargo}</p>
+                                <p id="p-descricao-vaga">{vaga.descrição}</p>
+                            </div>)
+                        })
                     }
                 </section>
                 <button className="visible-elements" onClick={() => setAddVaga(!addVaga)}>Adicionar Vaga</button>
@@ -52,7 +77,7 @@ export default function User_Companie(){
                     <>
                         <form onSubmit={postarVaga}>
                             <label>Titulo da Vaga:</label>
-                            <input type={"text"} value={tituloVaga} onChange={(e)=> setTItuloVaga(e.target.value)} required/>
+                            <input type={"text"} onChange={(e)=> setTItuloVaga(e.target.value)} required/>
                             <label>Cargo</label>
                             <div className='carreiras'>
                             <input type="radio" id="carreira1" name="carreira" value="Programador" onChange={(e)=> setCargo("Programador")} required/>
@@ -68,7 +93,7 @@ export default function User_Companie(){
                                 <label>Animador</label>
                             </div>
                             <label>Descrição:</label>
-                            <input id='input-descrição' type={"text"} value={descriçãoVaga} onChange={(e)=> setDescriçãoVaga(e.target.value)} required/>
+                            <input id='input-descrição' type={"text"} onChange={(e)=> setDescriçãoVaga(e.target.value)} required/>
                             <input type="submit" value="Postar" />
                         </form>
                     </>

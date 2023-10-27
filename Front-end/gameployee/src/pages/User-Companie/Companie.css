@@ -6,13 +6,6 @@
     margin-bottom: 50px;
 }
 
-.painel-vagas{
-    height: 200px;
-    width: 90%;
-    border-radius: 10px;
-    margin: auto;
-    background-color: rgb(207, 203, 203);
-}
 
 .empresa-container{
     height: auto;
@@ -22,4 +15,38 @@
     margin-left: 5%;
     margin-top: 20px;
     margin-bottom: 20px;
+}
+
+.painel-vagas{
+    height: auto;
+    width: 90%;
+    border-radius: 10px;
+    margin: auto;
+    background-color: rgb(207, 203, 203);
+    padding: 50px;
+}
+
+.vaga-renderizada{
+    height: auto;
+    width: auto;
+    background-color: aliceblue;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+}
+
+#p-titulo-vaga{
+    height: auto;
+    width: auto;
+}
+#p-cargo-vaga{height: auto;
+    width: auto;
+    font-size: 25px;
+}
+#p-descricao-vaga{height: auto;
+    width: auto;
+    font-size: 20px;
 }

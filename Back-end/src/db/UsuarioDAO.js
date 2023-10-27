@@ -17,13 +17,7 @@ async function buscarDesenvolvedores(){
 
 async function logarDev(email,senha, callback){
     const query = 'SELECT * FROM tb_usuarios WHERE email = $1 AND senha = $2'
-    pool.query(query,[email,senha],(err,res)=>{
-        if(err){
-            callback(err)
-        }else{
-            callback(null)
-        }
-    })
+    pool.query(query,[email,senha],callback)
 }
 
 const novoDesenvolvedor = new Desenvolvedor('Leonardo','Programador','ubsoft@email.com','acMirage','888888888')

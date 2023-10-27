@@ -3,9 +3,10 @@ const Empresa = require('./Users/Empresa.js');
 /* const multer = require('multer');
 const path = require('path'); */
 const { buscarDesenvolvedores, inserirDesenvolvedor, logarDev , buscarTrabalhos, inserirTrabalho} = require('./db/UsuarioDAO.js')
-const { buscarEmpresas, inserirEmpresa, buscarVagas , inserirVaga, logarEmpresa } = require('./db/EmpresaDAO.js')
+const { buscarEmpresas, inserirEmpresa, buscarVagas , inserirVaga, logarEmpresa, buscarVagasLocais } = require('./db/EmpresaDAO.js')
 const express = require('express');
-const cors = require('cors')
+const cors = require('cors');
+const Vaga = require('./Users/Vagas.js');
 const server = express();
 const port = 3000;
 
@@ -69,20 +70,29 @@ server.post('/Login',(req,res)=>{
     console.log('Dados recebidos no servidor:', data);  
     
     if(data.usuario){
-        const {nome,email,senha} = data.usuario
-        const usuarioLogado = new Desenvolvedor(nome,email,senha)
-
-        console.log('Login de usuario bem sucedido')
-        res.status(200).json({ message: 'Login com sucesso', usuario: usuarioLogado, id: usuarioLogado.id, nome: usuarioLogado.nome, cargo: usuarioLogado.cargo });
+        const {email,senha} = data.usuario
+        logarDev(email,senha, async (err,result)=>{
+            if(err || result.rowCount == 0){
+                console.log("Login rejeitado: " + err);
+                res.status(400).json({ error: 'Email ou senha incorretos ou inexistentes' });
+            }else if(result.rowCount == 1){
+                const dadosUsuario = await result.rows
+                console.log(dadosUsuario[0])
+                console.log(dadosUsuario[0].id_usuario)
+                console.log(dadosUsuario[0].nome_usuario)
+                console.log("Login de empresa bem sucedido")
+                res.status(200).json({ message: 'Login com sucesso', usuario: dadosUsuario[0], id: dadosUsuario[0].id_usuario, nome: dadosUsuario[0].nome, cargo: dadosUsuario[0].cargo});
+            }
+        })
     }else 
     if(data.empresa){
         const {email,senha} = data.empresa
 
         logarEmpresa(email,senha, async (err,result)=>{
-            if(err){
-                console.log("Login rejeitado: " + err.message);
+            if(err || result.rowCount == 0){
+                console.log("Login rejeitado: " + err);
                 res.status(400).json({ error: 'Email ou senha incorretos ou inexistentes' });
-            }else{
+            }else if(result.rowCount == 1){
                 const dadosEmpresa = await result.rows
                 console.log(dadosEmpresa[0])
                 console.log(dadosEmpresa[0].id_empresa)
@@ -96,30 +106,47 @@ server.post('/Login',(req,res)=>{
     }
 })
 
-/* (err)=>{
-            if(err){
-                console.log("Login rejeitado: " + err.message);
-                res.status(400).json({ error: 'Email ou senha incorretos ou inexistentes' });           
-            } else{
-                console.log("Login de empresa bem sucedido")
-                res.status(200).json({ message: 'Login com sucesso', empresa: empresaLogada, id: empresaLogada.id, nome: empresaLogada.nome });
-            }
-
-        } */
-
-server.post('/Postar Vaga', (req, res) => {
+server.post('/Postar_Vaga', (req, res) => {
     const data = req.body
-    console.log('Dados recebidos no servidor:', data);
-    res.send('Dados recebidos com sucesso');
+    const {titulo,cargo,descrição,nome_empresa} = data.vaga
+    const novaVaga = new Vaga(titulo,cargo,descrição,nome_empresa)
+    console.log('Dados recebidos no servidor:', novaVaga);
+    inserirVaga(novaVaga,(err)=>{
+        if(err){
+            console.log("Erro ao enviar os dados = " + err.message);
+            res.json({ error: err.message });
+        } else{
+            console.log('DADOS ENVIADOS');
+            console.log("Nova vaga criada: ", novaVaga);
+            res.json({ message: 'Vaga criada com sucesso', vaga: novaVaga, titulo: novaVaga.titulo, descrição: novaVaga.descricao, nome_empresa: novaVaga.nome_empresa });
+    
+        }
+    })
 
 });
 
 
 // GET das vagas da Empresa local 
-server.get('/Vagas da empresa',(req,res)=>{
-
-})
-
+server.get('/Vagas_da_empresa/:nome',(req,res)=>{
+    const nomeEmpresa = req.params.nome
+    buscarVagasLocais(nomeEmpresa,async (err,result)=>{
+        if(err || result.rowCount == 0){
+            console.log('Sem vagas ainda');
+        }else if(result.rowCount >= 1){
+            const dadosVagas = await result.rows
+            console.log(dadosVagas)
+            console.log(dadosVagas.titulo)
+            console.log(dadosVagas.cargo)
+            console.log(dadosVagas.descrição)
+            console.log("Todas as vagas divulgadas")
+            res.json({ message: 'Vagas enviadas', dadosVagas: dadosVagas});
+        }
+    })
+})/* 
+server.get('/Vagas_da_empresa/:nome',(req,res)=>{
+    const nome = req.params.nome
+    res.json({id:2,nome: nome})
+}) */
 // GET de CANDIDATOS
 /* server.get('/Candidatos',(req,res)=>{
     const data = req.body
