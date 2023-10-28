@@ -6,20 +6,27 @@ import './Jobs.css'
 
 export default function Jobs(){
 
-    const [cargosEscolhido, setCargosEscolhido] = useState([])
+    const [cargosEscolhidos, setCargosEscolhidos] = useState([])
+    const [vagas,setVagas] = useState([]) 
 
     useEffect(()=>{
-        console.log(cargosEscolhido)
-    },[cargosEscolhido])
+        async function getData(){
+            const response = await fetch(`http://localhost:3000/Vagas`)
+            const data = await response.json() 
+            setVagas(data.dadosVagas)       
+        };
+        getData()
+        console.log(cargosEscolhidos)
+    },[cargosEscolhidos])
 
     const addCargo = (value) => {
-        setCargosEscolhido([...cargosEscolhido, value]);
+        setCargosEscolhidos([...cargosEscolhidos, value]);
       };
     
       // 3. Função para remover um valor do array.
     const removeCargo = (value) => {
-        const updatedValues = cargosEscolhido.filter((item) => item !== value);
-        setCargosEscolhido(updatedValues);
+        const updatedValues = cargosEscolhidos.filter((item) => item !== value);
+        setCargosEscolhidos(updatedValues);
     };
 
     return(
@@ -39,14 +46,20 @@ export default function Jobs(){
                 <input className='opcoes-vagas' type="checkbox" id="carreira4" name="carreira" value="Animador" onChange={(e) => {if(e.target.checked){addCargo(e.target.value)}else{removeCargo(e.target.value)} }}/>
                 <label>Animador</label>
             </div>
-            <div className="container-vagas">
-                <section>
+            <section className="container-vagas">
                     {
-                        
+                        vagas.map((vaga,index)=>{
+                            if(cargosEscolhidos.includes(vaga.cargo)){
+                                return (
+                                <div className="vagas-renderizadas" key={index}>
+                                    <p id="p3-titulo-vaga">{vaga.titulo}</p>
+                                    <p id="p2-cargo-vaga">{vaga.cargo}</p>
+                                    <p id="p1-descricao-vaga">{vaga.descrição}</p>
+                                </div>)
+                            }
+                        })
                     }
-                </section>
-            </div>
-            
+            </section>
         </>
     )
 }

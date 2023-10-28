@@ -3,16 +3,9 @@ const Desenvolvedor = require('../Users/Devs.js');
 
 const pool = criarPool()
 
-async function buscarDesenvolvedores(){
-    return new Promise((resolve, reject) => {
-        pool.query('SELECT * from tb_usuarios', (err, res) => {
-          if (!err) {
-            resolve(res.rows);
-          } else {
-            reject(err.message);
-          }
-        });
-      });
+async function buscarCandidatos(callback){
+    const query = 'SELECT nome,cargo,email,telefone FROM tb_usuarios'
+    pool.query(query,callback)
 }
 
 async function logarDev(email,senha, callback){
@@ -63,4 +56,4 @@ function inserirTrabalho(novoTrabalho){
 
 main() */
 
-module.exports = {buscarDesenvolvedores, inserirDesenvolvedor, logarDev, buscarTrabalhos,inserirTrabalho}
+module.exports = {buscarCandidatos, inserirDesenvolvedor, logarDev, buscarTrabalhos,inserirTrabalho}

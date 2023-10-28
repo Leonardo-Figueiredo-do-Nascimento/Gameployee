@@ -2,7 +2,7 @@ const Desenvolvedor = require('./Users/Devs.js');
 const Empresa = require('./Users/Empresa.js');
 /* const multer = require('multer');
 const path = require('path'); */
-const { buscarDesenvolvedores, inserirDesenvolvedor, logarDev , buscarTrabalhos, inserirTrabalho} = require('./db/UsuarioDAO.js')
+const { buscarCandidatos, inserirDesenvolvedor, logarDev , buscarTrabalhos, inserirTrabalho} = require('./db/UsuarioDAO.js')
 const { buscarEmpresas, inserirEmpresa, buscarVagas , inserirVaga, logarEmpresa, buscarVagasLocais } = require('./db/EmpresaDAO.js')
 const express = require('express');
 const cors = require('cors');
@@ -125,6 +125,18 @@ server.post('/Postar_Vaga', (req, res) => {
 
 });
 
+server.get('/Vagas',(req,res)=>{
+    buscarVagas(async (err,result)=>{
+        if(err || result.rowCount == 0){
+            res.json(err)
+        }else if(result.rowCount >= 1){
+            const dadosVagas = await result.rows
+            console.log(dadosVagas)
+            console.log("Todas as vagas divulgadas")
+            res.json({ message: 'Vagas enviadas', dadosVagas: dadosVagas});
+        }
+    })
+})
 
 // GET das vagas da Empresa local 
 server.get('/Vagas_da_empresa/:nome',(req,res)=>{
@@ -142,15 +154,21 @@ server.get('/Vagas_da_empresa/:nome',(req,res)=>{
             res.json({ message: 'Vagas enviadas', dadosVagas: dadosVagas});
         }
     })
-})/* 
-server.get('/Vagas_da_empresa/:nome',(req,res)=>{
-    const nome = req.params.nome
-    res.json({id:2,nome: nome})
-}) */
+})
+
 // GET de CANDIDATOS
-/* server.get('/Candidatos',(req,res)=>{
-    const data = req.body
-}) */
+server.get('/Candidatos',(req,res)=>{
+    buscarCandidatos(async (err,result)=>{
+        if(err || result.rowCount == 0){
+            res.json(err)
+        }else if(result.rowCount >= 1){
+            const dadosUsuarios = await result.rows
+            console.log(dadosUsuarios)
+            console.log("Todas as vagas divulgadas")
+            res.json({ message: 'Vagas enviadas', dadosUsuarios: dadosUsuarios});
+        }
+    })
+})
 
 // POST DE TRABALHOS DO USUARIO
 /* server.post('/Trabalho', upload.single('file'), (req, res) => {

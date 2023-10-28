@@ -54,16 +54,10 @@ async function buscarVagasLocais(nome_empresa,callback){
     pool.query(query,[nome_empresa],callback)
 }
 
-async function buscarVagas(){
-    return new Promise((resolve, reject) => {
-        pool.query('SELECT * from tb_vagas', (err, res) => {
-          if (!err) {
-            resolve(res.rows);
-          } else {
-            reject(err.message);
-          }
-        });
-      });
+async function buscarVagas(callback){
+    const query = 'SELECT titulo,cargo,descrição,tb_vagas_empresas.nome_empresa FROM tb_vagas_empresas '+
+                  'LEFT JOIN tb_empresas ON tb_vagas_empresas.nome_empresa = tb_empresas.nome_empresa '
+    pool.query(query,callback)
 }
 
 
