@@ -35,6 +35,13 @@ async function buscarTrabalhos(id_usuario,callback){
     pool.query(query,[id_usuario],callback)
 }
 
+async function buscarArquivo(titulo,callback){
+    const query = 'SELECT arquivo FROM tb_trabalhos WHERE tb_trabalhos.titulo = $1'
+
+    pool.query(query,[titulo],callback)
+}
+
+
 function inserirTrabalho(novoTrabalho,arquivo,callback){
     const query = 'INSERT INTO tb_trabalhos(id_trabalho, id_usuario, titulo, arquivo) VALUES ($1,$2,$3,$4)'
     pool.query(query,[novoTrabalho.id,novoTrabalho.id_usuario,novoTrabalho.titulo,arquivo],(err,res)=>{
@@ -46,6 +53,8 @@ function inserirTrabalho(novoTrabalho,arquivo,callback){
         }
     })
 }
+
+
 /* async function main(){
         const dadosDesenvolvedores = await buscarDesenvolvedores();
         console.log(dadosDesenvolvedores);
@@ -53,4 +62,4 @@ function inserirTrabalho(novoTrabalho,arquivo,callback){
 
 main() */
 
-module.exports = {buscarCandidatos, inserirDesenvolvedor, logarDev, buscarTrabalhos,inserirTrabalho}
+module.exports = {buscarCandidatos, inserirDesenvolvedor, logarDev, buscarTrabalhos,inserirTrabalho,buscarArquivo}

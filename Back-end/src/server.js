@@ -3,7 +3,7 @@ const Empresa = require('./Users/Empresa.js');
 const Vaga = require('./Users/Vagas.js');
 const Trabalho = require('./Users/Trabalhos.js');
 const multer = require('multer');
-const { buscarCandidatos, inserirDesenvolvedor, logarDev , buscarTrabalhos, inserirTrabalho} = require('./db/UsuarioDAO.js')
+const { buscarCandidatos, inserirDesenvolvedor, logarDev , buscarTrabalhos, inserirTrabalho, buscarArquivo} = require('./db/UsuarioDAO.js')
 const { inserirEmpresa, buscarVagas , inserirVaga, logarEmpresa, buscarVagasLocais } = require('./db/EmpresaDAO.js')
 const express = require('express');
 const cors = require('cors');
@@ -161,8 +161,8 @@ server.get('/Candidatos',(req,res)=>{
         }else if(result.rowCount >= 1){
             const dadosUsuarios = await result.rows
             console.log(dadosUsuarios)
-            console.log("Todas as vagas divulgadas")
-            res.json({ message: 'Vagas enviadas', dadosUsuarios: dadosUsuarios});
+            console.log("Todos os usuarios divulgados")
+            res.json({ message: 'Usuarios enviados', dadosUsuarios: dadosUsuarios});
         }
     })
 })
@@ -188,11 +188,9 @@ server.post('/Postar_Trabalho/:id', uploads.single('file'), (req, res) => {
     })
 }); 
 
-/* server.get('/Trabalhos_usuario', upload.single('file'), (req, res) => {
-    const data = {
-      titulo: req.body.titulo,
-      file: req.file, // Informações do arquivo
-    };
+// Get dos Trabalhos do usuario
+/* server.get('/Trabalhos_usuario/:id', uploads.single('file'), (req, res) => {
+    const idUsuario = req.params.id
     console.log('Dados recebidos no servidor:', data);
     buscarTrabalhos(async (err,result)=>{
         if(err || result.rowCount == 0){
@@ -205,8 +203,41 @@ server.post('/Postar_Trabalho/:id', uploads.single('file'), (req, res) => {
         }
     })
     res.json();
-});  */
+}); */ 
 
+server.get('/Trabalhos_usuario/:id', (req, res) => {
+    const idUsuario = req.params.id
+    buscarTrabalhos(idUsuario,async (err,result)=>{
+        if(err || result.rowCount == 0){
+            res.json(err)
+        }else if(result.rowCount >= 1){
+            const dadosTrabalhos = await result.rows
+            console.log(dadosTrabalhos)
+            console.log("Todos os trabalhos enviados")
+            res.json({message:'Todos os trabalhos',dadosTrabalhos: dadosTrabalhos});
+        }
+    })
+}); 
+
+server.get('/download/:titulo', (req, res) => {
+    const titulo = req.params.titulo;
+
+    buscarArquivo(titulo, (err, result) => {
+        if (err) {
+            console.error('Erro ao recuperar arquivo do banco de dados:', err);
+            res.status(500).send('Erro ao recuperar arquivo do banco de dados');
+            return;
+        }
+
+        if (result.rowCount === 0) {
+            res.status(404).send('Arquivo não encontrado');
+        } else {
+            const arquivo = result.rows[0].arquivo;
+            res.setHeader('Content-Type', 'image/png');
+            res.end(arquivo);
+        }
+    });
+})
 
 server.listen(port,()=>{
     console.log("Servidor conectado") 

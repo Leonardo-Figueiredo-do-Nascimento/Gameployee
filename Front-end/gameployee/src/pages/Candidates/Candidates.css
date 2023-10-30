@@ -45,7 +45,8 @@
     height: auto;
     width: auto;
 }
-#p3-cargo-usuario{height: auto;
+#p3-cargo-usuario{
+    height: auto;
     width: auto;
     font-size: 25px;
     text-decoration: underline;
