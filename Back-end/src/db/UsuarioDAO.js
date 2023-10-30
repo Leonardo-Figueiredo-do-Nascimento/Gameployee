@@ -27,25 +27,22 @@ function inserirDesenvolvedor(novoDesenvolvedor,callback){
     })
 }
 
-async function buscarTrabalhos(id_usuario){
-    return new Promise((resolve, reject) => {
-        pool.query('SELECT titulo,arquivo from tb_trabalhos WHERE id_usuario = ($1)',[id_usuario], (err, res) => {
-          if (!err) {
-            resolve(res.rows);
-          } else {
-            reject(err.message);
-          }
-        });
-      });
+async function buscarTrabalhos(id_usuario,callback){
+    const query = 'SELECT titulo,arquivo FROM tb_trabalhos '+
+                  'LEFT JOIN tb_usuarios ON tb_trabalhos.id_usuario = tb_usuarios.id_usuario '+
+                  'WHERE tb_trabalhos.id_usuario = $1'
+
+    pool.query(query,[id_usuario],callback)
 }
 
-function inserirTrabalho(novoTrabalho){
+function inserirTrabalho(novoTrabalho,arquivo,callback){
     const query = 'INSERT INTO tb_trabalhos(id_trabalho, id_usuario, titulo, arquivo) VALUES ($1,$2,$3,$4)'
-    pool.query(query,[novoTrabalho.id,novoTrabalho.id_usuario,novoTrabalho.titulo,novoTrabalho.arquivo],(err,res)=>{
+    pool.query(query,[novoTrabalho.id,novoTrabalho.id_usuario,novoTrabalho.titulo,arquivo],(err,res)=>{
         if(err){
-            throw err
+            callback(err)
+
         } else{
-            console.log('Envio de dados feito')
+            callback(null)
         }
     })
 }

@@ -10,7 +10,8 @@ export default function User_Dev(){
     const [fileSelected, setFileSelected] = useState(false);
     const [file,setFile] = useState()
     const [titulo,setTitulo] = useState()
-    const [trabalho,setTrabalho] = useState()    
+    const [trabalho,setTrabalho] = useState()  
+    const [trabalhos,setTrabalhos] = useState([])  
 
     useEffect(() => {
         setTrabalho(
@@ -32,7 +33,7 @@ export default function User_Dev(){
         fd.append('titulo',titulo)
 
 
-        /* axios.post(`http://localhost:3000/Usuario/Desenvolvedor/${devId}/${devName}/${devCargo}/Trabalho`,fd)
+        /* axios.post(`http://localhost:3000/Postar_Trabalho/${devId}`,fd)
         .then(response => {
             console.log('Resposta do Axios:', response.data);
         })
@@ -42,19 +43,19 @@ export default function User_Dev(){
         console.log(fd.get('file'))
         console.log(fd.get('titulo'))
 
-        /* fetch(`http://localhost:3000/Trabalho`, {
+        await fetch(`http://localhost:3000/Postar_Trabalho/${devId}`,{
             method: 'POST',
-            // 👇 Set headers manually for single file upload
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            },
             body: fd
         })
-        .then((res) => res.json())
-        .then((data) => console.log(data))
-        .catch((err) => console.error(err)); */
-        setFile()
-        setTitulo()
+        .then((res) => {
+            console.log(res)
+            console.log(res.message)
+            console.log(res.arquivo)
+        })
+        .catch((err) => console.error(err));
+        //setTrabalhos(fd)
+        /* setFile()
+        setTitulo() */
         setFileSelected(false)
     }
 
@@ -67,11 +68,19 @@ export default function User_Dev(){
             <div className="dev-container">
                 <p className="dev-content">Seus Trabalhos:</p>
                 <div className="trabalhos">
-                    
+                    {
+                        /* trabalhos.map((trabalho,index) =>{
+                            return(
+                            <div key={index}>
+                                <a download>{trabalho.file}</a>
+                                <p>{trabalho.titulo}</p>
+                            </div>)
+                        }) */
+                    }
                 </div>
                 <form onSubmit={postarTrabalho}>
                     <label className="dev-content">Selecione um arquivo:</label> <br/>
-                    <input id='file-input' type="file"  name="file" onChange={(e)=>{setFile(e.target.files[0]); setFileSelected(true)}}/>
+                    <input id='file-input' type="file" name="file" required onChange={(e)=>{setFile(e.target.files[0]); setFileSelected(true)}}/>
 
                     {fileSelected && (
                         <div>

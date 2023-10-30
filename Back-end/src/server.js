@@ -1,29 +1,26 @@
 const Desenvolvedor = require('./Users/Devs.js');
 const Empresa = require('./Users/Empresa.js');
-/* const multer = require('multer');
-const path = require('path'); */
+const Vaga = require('./Users/Vagas.js');
+const Trabalho = require('./Users/Trabalhos.js');
+const multer = require('multer');
 const { buscarCandidatos, inserirDesenvolvedor, logarDev , buscarTrabalhos, inserirTrabalho} = require('./db/UsuarioDAO.js')
-const { buscarEmpresas, inserirEmpresa, buscarVagas , inserirVaga, logarEmpresa, buscarVagasLocais } = require('./db/EmpresaDAO.js')
+const { inserirEmpresa, buscarVagas , inserirVaga, logarEmpresa, buscarVagasLocais } = require('./db/EmpresaDAO.js')
 const express = require('express');
 const cors = require('cors');
-const Vaga = require('./Users/Vagas.js');
 const server = express();
 const port = 3000;
 
 server.use(cors())
 server.use(express.json())
-
-/* const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, 'uploads/'); // Defina o diretório onde os arquivos serão armazenados
+const storage = multer.diskStorage({
+    destination: function(req,file,callback){
+        callback(null,__dirname + '/uploads')
     },
-    filename: function (req, file, cb) {
-      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-      cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
-    },
-  });
-  
-  const upload = multer({ storage }); */
+    filename: function(req,file,callback){
+        callback(null,file.originalname + ' - ' + Date.now())
+    }
+})
+const uploads = multer({storage: storage});
   
 server.post('/Cadastro',(req,res)=>{
     const data = req.body;
@@ -170,15 +167,46 @@ server.get('/Candidatos',(req,res)=>{
     })
 })
 
-// POST DE TRABALHOS DO USUARIO
-/* server.post('/Trabalho', upload.single('file'), (req, res) => {
+// POST DE TRABALHOS DO USUARIO Verdadeiro
+server.post('/Postar_Trabalho/:id', uploads.single('file'), (req, res) => {
+    const idUsuario = req.params.id
+    const titulo = req.body.titulo
+
+    console.log(req.file)
+    console.log(titulo)
+    const novoTrabalho = new Trabalho(idUsuario,titulo)
+    console.log('Dados recebidos no servidor:', novoTrabalho);
+    inserirTrabalho(novoTrabalho,req.file,(err)=>{
+        if(err){
+            console.log("Erro ao enviar os dados = " + err.message);
+            res.json({ error: err.message });
+        } else{
+            console.log('DADOS ENVIADOS');
+            console.log("Novo trabalho postado: ", novoTrabalho);
+            res.json({ message: 'Trabalho postado com sucesso', trabalho: novoTrabalho, titulo: novoTrabalho.titulo, arquivo: req.file });
+        }
+    })
+}); 
+
+/* server.get('/Trabalhos_usuario', upload.single('file'), (req, res) => {
     const data = {
       titulo: req.body.titulo,
       file: req.file, // Informações do arquivo
     };
     console.log('Dados recebidos no servidor:', data);
-    res.send('Dados recebidos com sucesso');
-}); */
+    buscarTrabalhos(async (err,result)=>{
+        if(err || result.rowCount == 0){
+            res.json(err)
+        }else if(result.rowCount >= 1){
+            const dadosTrabalhos = await result.rows
+            console.log(dadosTrabalhos)
+            console.log("Todos os trabalhos enviados")
+            res.json({ message: 'trabalhos enviados', dadosUsuarios: dadosTrabalhos});
+        }
+    })
+    res.json();
+});  */
+
 
 server.listen(port,()=>{
     console.log("Servidor conectado") 

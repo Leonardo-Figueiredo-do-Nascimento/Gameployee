@@ -46,7 +46,6 @@ export default function Register(){
     const cadastrar = async (e) => {
         e.preventDefault()
     
-
         if(dev == true && nome != '' && email != '' && senha != '' && cargo != '' && telefone != ''){
 
             const dadosUsuario = JSON.stringify(dados)
@@ -54,7 +53,6 @@ export default function Register(){
             console.log(dadosUsuario)
 
         } else if(companie && nome != '' && email != '' && senha != ''){
-
            
             const dadosEmpresa = JSON.stringify(dados)
 

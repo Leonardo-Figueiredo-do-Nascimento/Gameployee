@@ -20,7 +20,6 @@ async function logarEmpresa(email,senha, callback){
     pool.query(query,[email,senha],callback)
 }
 
-
 const novaEmpresa = new Empresa('Ubisoft','ubsoft@email.com','acMirage')
 
 function inserirEmpresa(novaEmpresa, callback){
@@ -59,6 +58,5 @@ async function buscarVagas(callback){
                   'LEFT JOIN tb_empresas ON tb_vagas_empresas.nome_empresa = tb_empresas.nome_empresa '
     pool.query(query,callback)
 }
-
 
 module.exports = {buscarEmpresas, inserirEmpresa , buscarVagas, buscarVagasLocais , inserirVaga, logarEmpresa}
