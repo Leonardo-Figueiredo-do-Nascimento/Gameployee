@@ -2,7 +2,7 @@ const Desenvolvedor = require('./Users/Devs.js');
 const Empresa = require('./Users/Empresa.js');
 const Vaga = require('./Users/Vagas.js');
 const Trabalho = require('./Users/Trabalhos.js');
-const { buscarCandidatos, inserirDesenvolvedor, logarDev , buscarTrabalhos, inserirTrabalho, deletarTrabalho, buscarTelefone, mudarTelefone} = require('./db/UsuarioDAO.js')
+const { buscarCandidatos, inserirDesenvolvedor, logarDev , buscarTrabalhos, inserirTrabalho, deletarTrabalho, buscarTelefone, mudarTelefone, buscarDadosCandidato} = require('./db/UsuarioDAO.js')
 const { inserirEmpresa, buscarVagas , inserirVaga, logarEmpresa, buscarVagasLocais } = require('./db/EmpresaDAO.js')
 const express = require('express');
 const cors = require('cors');
@@ -153,6 +153,21 @@ server.get('/Candidatos',(req,res)=>{
             console.log(dadosUsuarios)
             console.log("Todos os usuarios divulgados")
             res.json({ message: 'Usuarios enviados', dadosUsuarios: dadosUsuarios});
+        }
+    })
+})
+
+server.get('/Dados_Candidato/:id',(req,res)=>{
+    const idUsuario = req.params.id
+
+    buscarDadosCandidato(idUsuario,async (err,result)=>{
+        if(err || result.rowCount == 0){
+            res.json(err)
+        }else if(result.rowCount >= 1){
+            const dadosUsuario = await result.rows
+            console.log(dadosUsuario)
+            console.log("Todos os usuarios divulgados")
+            res.json({ message: 'Usuarios enviados', dadosUsuario: dadosUsuario});
         }
     })
 })

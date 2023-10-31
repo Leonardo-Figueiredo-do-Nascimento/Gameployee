@@ -1,10 +1,11 @@
-import {Link} from 'react-router-dom'
+import {Link, useParams} from 'react-router-dom'
 import {useState, useEffect} from 'react'
 import Header from '../../components/Header Companie'
 import './Candidates.css'
+import Button from '../../components/Button'
 
 export default function Jobs(){
-
+    const {companieId,companieName} = useParams()
     const [cargosEscolhido, setCargosEscolhido] = useState([])
     const [usuarios,setUsuarios] = useState([])
 
@@ -54,6 +55,7 @@ export default function Jobs(){
                                     <p id="p3-cargo-usuario">{usuario.cargo}</p>
                                     <p id="p2-telefone-usuario">Telefone: {usuario.telefone}</p>
                                     <p id="p1-email-usuario">Email: {usuario.email}</p>
+                                    <Button to={`/Usuario/Empresa/${companieId}/${companieName}/Candidatos/${usuario.id_usuario}`} title={'Acesse'}></Button>
                                 </div>)
                             }
                             

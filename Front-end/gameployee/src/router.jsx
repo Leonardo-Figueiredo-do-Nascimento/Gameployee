@@ -8,6 +8,8 @@ import Jobs from './pages/Jobs/Jobs'
 import User_Dev from './pages/User-Dev/User-Dev'
 import User_Companie from './pages/User-Companie/User-Companie'
 import Candidates from './pages/Candidates/Candidates'
+import Companie_Dev from './pages/Candidatos da vaga/Companie_Dev'
+
 
 const router = createBrowserRouter([
     {
@@ -45,6 +47,10 @@ const router = createBrowserRouter([
     {
         path:"/Usuario/Empresa/:companieId/:companieName/Candidatos",
         element: <Candidates/>
+    },
+    {
+        path:"/Usuario/Empresa/:companieId/:companieName/Candidatos/:devId",
+        element: <Companie_Dev/>
     }
 ])
 
