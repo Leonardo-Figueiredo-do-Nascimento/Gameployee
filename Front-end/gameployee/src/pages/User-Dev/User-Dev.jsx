@@ -3,25 +3,33 @@ import { useParams } from "react-router-dom";
 import { useState , useEffect } from "react";
 import axios from 'axios'
 import "./User.css"
-import img from './images/file-icon.svg'
 
 export default function User_Dev(){
   
     const {devId, devName, devCargo} = useParams()
-    const [fileSelected, setFileSelected] = useState(false);
-    const [file,setFile] = useState()
+    const [newArt, setNewArt] = useState(false);
     const [titulo,setTitulo] = useState()
-    const [trabalho,setTrabalho] = useState()  
+    const [link,setLink] = useState('')
+    const [telefone,setTelefone] = useState('')
+    const [trabalho,setTrabalho] = useState() 
     const [trabalhos,setTrabalhos] = useState([])  
 
     useEffect(() => {
-        setTrabalho(
-            {
-                arquivo: file,
-                titulo: titulo
-            }
-        )}, [ file,titulo]);
+        setTrabalho({
+                    titulo: titulo,
+                    trabalho_link: link
+        }
+    )}, [titulo,link]);
 
+    useEffect(()=>{
+        async function getData(){
+            const response = await fetch(`http://localhost:3000/Telefone/${devId}`);
+            const data = await response.json()
+            console.log(data);
+            setTelefone(data.telefone[0].telefone)
+        }
+        getData()
+    },[])
 
     useEffect(()=>{
         async function getData(){
@@ -29,81 +37,76 @@ export default function User_Dev(){
             const data = await response.json()
             console.log(data);
             console.log(data.dadosTrabalhos);
-            setTrabalhos(data.dadosTrabalhos); 
+            setTrabalhos(data.dadosTrabalhos)
         }
         getData()
     },[])
 
-    const excluirTrabalho = async (e) =>{
+    const mudarTelefone = async (e) =>{
         e.preventDefault()
+        const novoTelefone = prompt("Digite o novo numero de telefone pra contato")
+        axios.patch(`http://localhost:3000/Mudar_Telefone/${devId}/${novoTelefone}`)
+        .then((res) => {
+            console.log(res.message)
+        })
+        .catch((err) => console.error(err));
+
+        window.location.reload()
+    }
+
+    const excluirTrabalho = async (e,id_trabalho) =>{
+        e.preventDefault()
+        const exclusão = confirm("Quer mesmo excluir esse trabalho?")
+        if(exclusão){
+
+            axios.delete(`http://localhost:3000/Deletar_Trabalho/${id_trabalho}`)
+            .then((res) => {
+                console.log(res.message)
+            })
+            .catch((err) => console.error(err));
+
+            window.location.reload()
+        } else{
+            return;
+        }
     }
 
     const postarTrabalho = async (e) =>{
 
         e.preventDefault()
 
-        if(!file){
-            return;
-        }
-        const fd = new FormData()
-        fd.append('file',file)
-        fd.append('titulo',titulo)
-
-        console.log(fd.get('file'))
-        console.log(fd.get('titulo'))
-
-        await fetch(`http://localhost:3000/Postar_Trabalho/${devId}`,{
-            method: 'POST',
-            body: fd
-        })
+        axios.post(`http://localhost:3000/Postar_Trabalho/${devId}`,trabalho)
         .then((res) => {
             console.log(res)
-            console.log(res.message)
-            console.log(res.arquivo)
         })
         .catch((err) => console.error(err));
-        /* setFile()
-        setTitulo() */
-        setFileSelected(false)
+        
+        window.location.reload()
     }
-
-    const downloadFile = async (titulo) => {
-        try {
-            const response = await fetch(`http://localhost:3000/download/${titulo}`);
-            const blob = await response.blob();
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = titulo;
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(url);
-        } catch (error) {
-            console.error('Erro ao baixar o arquivo:', error);
-        }
-    };
-    
 
     return(
         <>
             <Header/>
             <h1 id="nome-usuario">{devName}</h1>
             <h2 id="cargo">Ocupação: {devCargo}</h2>
+            <span style={{display:'flex',flexDirection:'row',height:'auto',width:'auto'}}>
+                <h2 id="telefone">Telefone: {telefone}</h2>
+                <button onClick={mudarTelefone} id='bt-telefone'>Mudar telefone</button>
+            </span>
             <div className="dev-container">
                 <p className="dev-content">Seus Trabalhos:</p>
                 <div className="trabalhos">
                     {
                         trabalhos.length > 0 ? (
                             trabalhos.map((trabalho, index) => (
-                                <div className="trabalho">
-                                    <div className="trabalho-renderizado" key={index}>
-                                        <a href={`http://localhost:3000/download/${trabalho.titulo}`} download={trabalho.titulo} id={'id-imagem'}>
-                                            <img src={img} />
-                                        </a>
-                                        <button onClick={() => downloadFile(trabalho.titulo)}>Baixar</button>
+                                <div className="trabalho" key={index}>
+                                    <div className="trabalho-renderizado" >
                                         <p id={'titulo-trabalho'}>{trabalho.titulo}</p>
                                     </div>
-                                    <button id="botão-exclusão" onClick={excluirTrabalho}>Excluir</button>
+                                    <div className="bt_opcoesTrabalho">
+                                        <a target={"_blank"} href={trabalho.trabalho_link} id="bt_linkTrabalho">Acessar Trabalho</a>
+                                        <button id="botão-exclusão" onClick={(e)=>excluirTrabalho(e,trabalho.id_trabalho)}>Excluir</button>
+                                    </div>
                                 </div>
                             ))
                         ) : (
@@ -111,19 +114,21 @@ export default function User_Dev(){
                         )
                     }
                 </div>
-                <form onSubmit={postarTrabalho}>
-                    <label className="dev-content">Selecione um arquivo:</label> <br/>
-                    <input id='file-input' type="file" name="file" required onChange={(e)=>{setFile(e.target.files[0]); setFileSelected(true)}}/>
+                
 
-                    {fileSelected && (
-                        <div>
-                            <label>Titulo do seu trabalho:</label>
-                            <input type="text" id="name" onChange={(e) => setTitulo(e.target.value)}/> <br/>
+                <button onClick={()=>setNewArt(!newArt)} id={'bt-addTrabalho'}>Novo Trabalho</button>
+
+                {newArt && (
+                    <form onSubmit={postarTrabalho} className={'artForm'}>
+                        <div className={'artForm'}>
+                            <label className="label_trabalho">Titulo do seu trabalho:</label>
+                            <input type="text" maxLength={80} onChange={(e) => setTitulo(e.target.value)}/> <br/>
+                            <label className="label_trabalho">Link do seu trabalho:</label>
+                            <input type="text" onChange={(e) => setLink(e.target.value)}/> <br/>
                             <input type={'submit'} value='Publicar'/>
                         </div>
-                    )}
-                    
-                </form>
+                    </form>
+                )}
             </div>
             
         </>

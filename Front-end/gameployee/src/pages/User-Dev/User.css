@@ -18,8 +18,8 @@
     margin-bottom: 20px;
 }
 
-#cargo{
-    font-size: 30px;
+#cargo,#telefone{
+    font-size: 2.3rem;
     height: auto;
     width: auto;
     margin-left: 5%;
@@ -34,17 +34,8 @@
     margin-bottom: 30px;
     background-color: rgb(188, 185, 185);
     border-radius: 10px;
-    display: grid;
-    grid-template-columns: auto auto auto;
-    gap: 10px;
-}
-
-.trabalho{
-    height: auto;
-    width: auto;
     display: flex;
     flex-direction: column;
-    align-items: center;
 }
 
 .trabalho-renderizado{
@@ -59,23 +50,70 @@
     cursor: pointer;
 }
 
+.trabalho{
+    height: auto;
+    width: auto;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.artForm{
+    width: auto;
+    display: flex;
+    margin: 0;
+    margin-left: -100px;
+    align-items: center;
+    flex-direction: column;
+}
+
+#bt-addTrabalho{
+    height: 80px;
+    width: 150px;
+    font-size: 20px;
+    margin-left: 37%;
+}
+
+.label_trabalho{
+    font-size: 19px;
+}
+
 #titulo-trabalho{
     height: auto;
     width: auto;
-    font-size: 30px;
+    font-size: 1.8rem;
+}
+.bt_opcoesTrabalho{
+    height: auto;
+    display: flex;
+    justify-content: end;
 }
 
-#id-imagem{
-    height: 100px;
-    width: auto;
-    margin-bottom: 20px;
+#bt_linkTrabalho{
+    font-size: 1.3rem;
+    height: 4rem;
+    width: 8rem;
+    padding-left: 15px;
+    padding-top: 5px;
+    margin: 10px;
+    color: white;
+    background-color: black;
+    border: 5px double white;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
 }
-
+#bt-telefone{
+    margin-top: 50px;
+    background-color: gray;
+    color: black;
+    border: 3px solid black;
+}
 #botão-exclusão{
+    font-size: 1.3rem;
+    height: 4rem;
+    width: 8rem;
     background-color: red;
     border: 5px solid black;
-}
-
-a,img{
-    width: auto;
 }

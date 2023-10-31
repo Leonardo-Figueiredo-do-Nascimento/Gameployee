@@ -22,10 +22,8 @@ export default function User_Companie(){
                         cargo: cargo,
                         descrição: descriçãoVaga,
                         nome_empresa: companieName
-                    }
-                    
-                }})}
-    , [ tituloVaga,cargo,descriçãoVaga,companieName]);
+                    }    
+    }})},[tituloVaga,cargo,descriçãoVaga,companieName]);
 
     useEffect(()=>{
         async function getData(){

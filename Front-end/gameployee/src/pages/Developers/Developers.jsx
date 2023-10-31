@@ -11,13 +11,13 @@ export default function Developers(){
                 <h2>Desenvolvedores</h2>
                 <br/>
                 <br/>
-                <p>Se cadastre hoje e tenha acesso agora mesmo a vagas disponíveis para a sua ocupação e concursos 
-                feito por empresas para contratação, você deve escolher apenas uma das ocupações apresentadas, 
+                <p>Se cadastre hoje e tenha acesso agora mesmo a vagas disponíveis para a sua ocupação feitas por 
+                empresas especializadas na área em busca de profissionais, você deve escolher apenas uma das ocupações apresentadas, 
                 sendo elas programador, artista 3d, designer ou animador.
                 </p>
                 <br/>
                 <br/>
-                <p>Feito o cadastro, você poderá exibir suas artes e trabalhos para que empresas
+                <p>Feito o cadastro, você poderá postar suas artes e trabalhos através de links para que empresas
                 desenvolvedoras possam visualizá-los e tentar entrar em contato com você.
                 </p>
                 <br/>

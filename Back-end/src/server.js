@@ -2,8 +2,7 @@ const Desenvolvedor = require('./Users/Devs.js');
 const Empresa = require('./Users/Empresa.js');
 const Vaga = require('./Users/Vagas.js');
 const Trabalho = require('./Users/Trabalhos.js');
-const multer = require('multer');
-const { buscarCandidatos, inserirDesenvolvedor, logarDev , buscarTrabalhos, inserirTrabalho, buscarArquivo} = require('./db/UsuarioDAO.js')
+const { buscarCandidatos, inserirDesenvolvedor, logarDev , buscarTrabalhos, inserirTrabalho, deletarTrabalho, buscarTelefone, mudarTelefone} = require('./db/UsuarioDAO.js')
 const { inserirEmpresa, buscarVagas , inserirVaga, logarEmpresa, buscarVagasLocais } = require('./db/EmpresaDAO.js')
 const express = require('express');
 const cors = require('cors');
@@ -12,15 +11,6 @@ const port = 3000;
 
 server.use(cors())
 server.use(express.json())
-const storage = multer.diskStorage({
-    destination: function(req,file,callback){
-        callback(null,__dirname + '/uploads')
-    },
-    filename: function(req,file,callback){
-        callback(null,file.originalname + ' - ' + Date.now())
-    }
-})
-const uploads = multer({storage: storage});
   
 server.post('/Cadastro',(req,res)=>{
     const data = req.body;
@@ -168,42 +158,23 @@ server.get('/Candidatos',(req,res)=>{
 })
 
 // POST DE TRABALHOS DO USUARIO Verdadeiro
-server.post('/Postar_Trabalho/:id', uploads.single('file'), (req, res) => {
+server.post('/Postar_Trabalho/:id', (req, res) => {
     const idUsuario = req.params.id
-    const titulo = req.body.titulo
-
-    console.log(req.file)
-    console.log(titulo)
-    const novoTrabalho = new Trabalho(idUsuario,titulo)
+    const data = req.body
+    const {titulo, trabalho_link} = data
+    const novoTrabalho = new Trabalho(idUsuario,titulo,trabalho_link)
     console.log('Dados recebidos no servidor:', novoTrabalho);
-    inserirTrabalho(novoTrabalho,req.file,(err)=>{
+    inserirTrabalho(novoTrabalho,(err)=>{
         if(err){
             console.log("Erro ao enviar os dados = " + err.message);
             res.json({ error: err.message });
         } else{
             console.log('DADOS ENVIADOS');
             console.log("Novo trabalho postado: ", novoTrabalho);
-            res.json({ message: 'Trabalho postado com sucesso', trabalho: novoTrabalho, titulo: novoTrabalho.titulo, arquivo: req.file });
+            res.json({ message: 'Trabalho postado com sucesso', trabalho: novoTrabalho, titulo: novoTrabalho.titulo, trabalho_link: novoTrabalho.trabalho_link });
         }
     })
-}); 
-
-// Get dos Trabalhos do usuario
-/* server.get('/Trabalhos_usuario/:id', uploads.single('file'), (req, res) => {
-    const idUsuario = req.params.id
-    console.log('Dados recebidos no servidor:', data);
-    buscarTrabalhos(async (err,result)=>{
-        if(err || result.rowCount == 0){
-            res.json(err)
-        }else if(result.rowCount >= 1){
-            const dadosTrabalhos = await result.rows
-            console.log(dadosTrabalhos)
-            console.log("Todos os trabalhos enviados")
-            res.json({ message: 'trabalhos enviados', dadosUsuarios: dadosTrabalhos});
-        }
-    })
-    res.json();
-}); */ 
+});   
 
 server.get('/Trabalhos_usuario/:id', (req, res) => {
     const idUsuario = req.params.id
@@ -214,29 +185,49 @@ server.get('/Trabalhos_usuario/:id', (req, res) => {
             const dadosTrabalhos = await result.rows
             console.log(dadosTrabalhos)
             console.log("Todos os trabalhos enviados")
-            res.json({message:'Todos os trabalhos',dadosTrabalhos: dadosTrabalhos});
+            res.json({message:'Todos os trabalhos',telefone:dadosTrabalhos.telefone,dadosTrabalhos: dadosTrabalhos});
         }
     })
 }); 
 
-server.get('/download/:titulo', (req, res) => {
-    const titulo = req.params.titulo;
-
-    buscarArquivo(titulo, (err, result) => {
-        if (err) {
-            console.error('Erro ao recuperar arquivo do banco de dados:', err);
-            res.status(500).send('Erro ao recuperar arquivo do banco de dados');
-            return;
+server.get('/Telefone/:id',(req,res)=>{
+    const idUsuario = req.params.id
+    buscarTelefone(idUsuario, async (err,result)=>{
+        if(err || result.rowCount == 0){
+            res.json(err)
+        }else if(result.rowCount >= 1){
+            const dadosTelefone = await result.rows
+            console.log(dadosTelefone)
+            res.json({message:'Todos os trabalhos',telefone:dadosTelefone});
         }
+    })
+})
 
-        if (result.rowCount === 0) {
-            res.status(404).send('Arquivo não encontrado');
-        } else {
-            const arquivo = result.rows[0].arquivo;
-            res.setHeader('Content-Type', 'image/png');
-            res.end(arquivo);
+server.patch('/Mudar_Telefone/:id/:novoTelefone',(req,res)=>{
+    const idUsuario = req.params.id
+    const novoTelefone = req.params.novoTelefone
+
+    mudarTelefone(idUsuario,novoTelefone,async (err,result)=>{
+        if(err || result.rowCount == 0){
+            res.json(err)
+        }else if(result.rowCount >= 1){
+            const dadosTelefone = await result.rows
+            console.log(dadosTelefone)
+            res.json({message:'Dados alterados com sucesso',telefone:dadosTelefone});
         }
-    });
+    })
+})
+
+server.delete('/Deletar_Trabalho/:idTrabalho',(req,res)=>{
+    const idTrabalho = req.params.idTrabalho
+    deletarTrabalho(idTrabalho,async (err,result)=>{
+        if(err){
+            res.json(err)
+        } else{
+            console.log("Trabalho excluído com sucesso.");
+            res.status(200).json({ message: 'Trabalho excluído com sucesso.' });
+        }
+    })
 })
 
 server.listen(port,()=>{

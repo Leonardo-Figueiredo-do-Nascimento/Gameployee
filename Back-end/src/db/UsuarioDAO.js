@@ -28,23 +28,16 @@ function inserirDesenvolvedor(novoDesenvolvedor,callback){
 }
 
 async function buscarTrabalhos(id_usuario,callback){
-    const query = 'SELECT titulo,arquivo FROM tb_trabalhos '+
+    const query = 'SELECT tb_usuarios.telefone,id_trabalho,titulo,trabalho_link FROM tb_trabalhos '+
                   'LEFT JOIN tb_usuarios ON tb_trabalhos.id_usuario = tb_usuarios.id_usuario '+
                   'WHERE tb_trabalhos.id_usuario = $1'
 
     pool.query(query,[id_usuario],callback)
 }
 
-async function buscarArquivo(titulo,callback){
-    const query = 'SELECT arquivo FROM tb_trabalhos WHERE tb_trabalhos.titulo = $1'
-
-    pool.query(query,[titulo],callback)
-}
-
-
-function inserirTrabalho(novoTrabalho,arquivo,callback){
-    const query = 'INSERT INTO tb_trabalhos(id_trabalho, id_usuario, titulo, arquivo) VALUES ($1,$2,$3,$4)'
-    pool.query(query,[novoTrabalho.id,novoTrabalho.id_usuario,novoTrabalho.titulo,arquivo],(err,res)=>{
+function deletarTrabalho(id_trabalho,callback){
+    const query = 'DELETE FROM tb_trabalhos WHERE id_trabalho = $1'
+    pool.query(query,[id_trabalho],(err,res)=>{
         if(err){
             callback(err)
 
@@ -54,12 +47,31 @@ function inserirTrabalho(novoTrabalho,arquivo,callback){
     })
 }
 
+function inserirTrabalho(novoTrabalho,callback){
+    const query = 'INSERT INTO tb_trabalhos(id_trabalho, id_usuario, titulo, trabalho_link) VALUES ($1,$2,$3,$4)'
+    pool.query(query,[novoTrabalho.id,novoTrabalho.id_usuario,novoTrabalho.titulo,novoTrabalho.trabalho_link],(err,res)=>{
+        if(err){
+            callback(err)
 
-/* async function main(){
-        const dadosDesenvolvedores = await buscarDesenvolvedores();
-        console.log(dadosDesenvolvedores);
+        } else{
+            callback(null)
+        }
+    })
 }
 
-main() */
+function buscarTelefone(id_usuario,callback){
+    const query = 'SELECT telefone FROM tb_usuarios WHERE id_usuario = $1'
 
-module.exports = {buscarCandidatos, inserirDesenvolvedor, logarDev, buscarTrabalhos,inserirTrabalho,buscarArquivo}
+    pool.query(query,[id_usuario],callback)
+}
+
+function mudarTelefone(id_usuario,novoTelefone,callback){
+    const query = 'UPDATE tb_usuarios '+
+                  'SET telefone = $1 '+
+                  'WHERE id_usuario = $2'
+
+    pool.query(query,[novoTelefone,id_usuario],callback)
+}
+
+
+module.exports = {buscarCandidatos, mudarTelefone,buscarTelefone,inserirDesenvolvedor, logarDev, buscarTrabalhos,inserirTrabalho,deletarTrabalho}
