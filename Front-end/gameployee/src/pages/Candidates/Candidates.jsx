@@ -1,8 +1,10 @@
-import {Link, useParams} from 'react-router-dom'
+import {useParams} from 'react-router-dom'
 import {useState, useEffect} from 'react'
 import Header from '../../components/Header Companie'
 import './Candidates.css'
 import Button from '../../components/Button'
+import config from "../URL";
+const URLServidor = config.serverAddress
 
 export default function Jobs(){
     const {companieId,companieName} = useParams()
@@ -11,12 +13,11 @@ export default function Jobs(){
 
     useEffect(()=>{
         async function getData(){
-            const response = await fetch(`http://localhost:3000/Candidatos`)
+            const response = await fetch(`${URLServidor}/Candidatos`)
             const data = await response.json() 
             setUsuarios(data.dadosUsuarios)       
         };
         getData()
-        console.log(cargosEscolhido)
     },[cargosEscolhido])
 
     const addCargo = (value) => {

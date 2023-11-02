@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom";
 import { useState , useEffect } from "react";
 import axios from 'axios'
 import "./User.css"
+import config from "../URL";
+const URLServidor = config.serverAddress
 
 export default function User_Dev(){
   
@@ -23,7 +25,7 @@ export default function User_Dev(){
 
     useEffect(()=>{
         async function getData(){
-            const response = await fetch(`http://localhost:3000/Telefone/${devId}`);
+            const response = await fetch(`${URLServidor}/Telefone/${devId}`);
             const data = await response.json()
             console.log(data);
             setTelefone(data.telefone[0].telefone)
@@ -33,7 +35,7 @@ export default function User_Dev(){
 
     useEffect(()=>{
         async function getData(){
-            const response = await fetch(`http://localhost:3000/Trabalhos_usuario/${devId}`);
+            const response = await fetch(`${URLServidor}/Trabalhos_usuario/${devId}`);
             const data = await response.json()
             console.log(data);
             console.log(data.dadosTrabalhos);
@@ -45,7 +47,7 @@ export default function User_Dev(){
     const mudarTelefone = async (e) =>{
         e.preventDefault()
         const novoTelefone = prompt("Digite o novo numero de telefone pra contato")
-        axios.patch(`http://localhost:3000/Mudar_Telefone/${devId}/${novoTelefone}`)
+        axios.patch(`${URLServidor}/Mudar_Telefone/${devId}/${novoTelefone}`)
         .then((res) => {
             console.log(res.message)
         })
@@ -59,7 +61,7 @@ export default function User_Dev(){
         const exclusão = confirm("Quer mesmo excluir esse trabalho?")
         if(exclusão){
 
-            axios.delete(`http://localhost:3000/Deletar_Trabalho/${id_trabalho}`)
+            axios.delete(`${URLServidor}/Deletar_Trabalho/${id_trabalho}`)
             .then((res) => {
                 console.log(res.message)
             })
@@ -75,7 +77,7 @@ export default function User_Dev(){
 
         e.preventDefault()
 
-        axios.post(`http://localhost:3000/Postar_Trabalho/${devId}`,trabalho)
+        axios.post(`${URLServidor}/Postar_Trabalho/${devId}`,trabalho)
         .then((res) => {
             console.log(res)
         })

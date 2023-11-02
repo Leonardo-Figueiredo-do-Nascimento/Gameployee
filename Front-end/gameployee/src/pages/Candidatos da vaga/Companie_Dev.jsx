@@ -1,8 +1,9 @@
 import Header from "../../components/Header Companie";
 import { useParams } from "react-router-dom";
 import { useState , useEffect } from "react";
-import axios from 'axios'
 import "./User.css"
+import config from "../URL";
+const URLServidor = config.serverAddress
 
 export default function User_Dev(){
   
@@ -13,7 +14,7 @@ export default function User_Dev(){
 
     useEffect(() => {
         async function getData(){
-            const response = await fetch(`http://localhost:3000/Dados_Candidato/${devId}`);
+            const response = await fetch(`${URLServidor}/Dados_Candidato/${devId}`);
             const data = await response.json()
             setDados(data.dadosUsuario[0])
         }
@@ -22,7 +23,7 @@ export default function User_Dev(){
 
     useEffect(()=>{
         async function getData(){
-            const response = await fetch(`http://localhost:3000/Telefone/${devId}`);
+            const response = await fetch(`${URLServidor}/Telefone/${devId}`);
             const data = await response.json()
             console.log(data);
             setTelefone(data.telefone[0].telefone)
@@ -32,7 +33,7 @@ export default function User_Dev(){
 
     useEffect(()=>{
         async function getData(){
-            const response = await fetch(`http://localhost:3000/Trabalhos_usuario/${devId}`);
+            const response = await fetch(`${URLServidor}/Trabalhos_usuario/${devId}`);
             const data = await response.json()
             console.log(data);
             console.log(data.dadosTrabalhos);

@@ -1,7 +1,8 @@
 import "./Login.css" 
-import {Link} from 'react-router-dom'
 import Header from '../../components/Header/index.jsx'
 import { useState , useEffect } from "react"
+import config from "../URL";
+const URLServidor = config.serverAddress
 
 export default function Login(){
 
@@ -49,7 +50,7 @@ export default function Login(){
         }
 
         try {
-            const response = await fetch('http://localhost:3000/Login', {
+            const response = await fetch(`${URLServidor}/Login`, {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
@@ -64,9 +65,9 @@ export default function Login(){
                 console.log('Dados enviados com sucesso!');
 
                 if(dadosResposta.usuario){
-                    window.location.href = `http://localhost:5173/Usuario/Desenvolvedor/${dadosResposta.id}/${dadosResposta.nome}/${dadosResposta.cargo}`
+                    window.location.href = `/Usuario/Desenvolvedor/${dadosResposta.id}/${dadosResposta.nome}/${dadosResposta.cargo}`
                 } else if(dadosResposta.empresa){
-                    window.location.href = `http://localhost:5173/Usuario/Empresa/${dadosResposta.id}/${dadosResposta.nome}`
+                    window.location.href = `/Usuario/Empresa/${dadosResposta.id}/${dadosResposta.nome}`
                 }
             } else if(response.status===400){
               alert('Usuario e email incorretos ou inexistentes');

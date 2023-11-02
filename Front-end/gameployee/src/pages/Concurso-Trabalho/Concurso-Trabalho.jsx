@@ -3,10 +3,12 @@ import { useParams } from "react-router-dom";
 import { useState , useEffect } from "react";
 import axios from 'axios'
 import "./User.css"
+import config from "../URL";
+const URLServidor = config.serverAddress
 
 export default function User_Dev(){
     
-    const {devId, devName, idConcurso} = useParams()
+    const {devId,idConcurso} = useParams()
     const [dadosConcurso,setDadosConcurso] = useState({titulo: '',cargo: '',descrição: ''})
     const [titulo,setTitulo] = useState()
     const [link,setLink] = useState('')
@@ -24,7 +26,7 @@ export default function User_Dev(){
 
     useEffect(()=>{
         async function getData(){
-            const response = await fetch(`http://localhost:3000/Trabalho_usuario_concurso/${devId}/${idConcurso}`);
+            const response = await fetch(`${URLServidor}/Trabalho_usuario_concurso/${devId}/${idConcurso}`);
             const data = await response.json()
             console.log(data);
             console.log(data.dadosTrabalho);
@@ -35,7 +37,7 @@ export default function User_Dev(){
 
     useEffect(()=>{
         async function getDadosConcurso(){
-            const response = await axios.get(`http://localhost:3000/Dados_Concurso/${idConcurso}`)
+            const response = await axios.get(`${URLServidor}/Dados_Concurso/${idConcurso}`)
             const data = await response.data.dadosConcurso[0]
             console.log(data)
             setDadosConcurso({
@@ -53,7 +55,7 @@ export default function User_Dev(){
         const exclusão = confirm("Quer mesmo excluir esse trabalho?")
         if(exclusão){
 
-            axios.delete(`http://localhost:3000/Deletar_Trabalho_Concurso/${idConcurso}/${devId}`)
+            axios.delete(`${URLServidor}/Deletar_Trabalho_Concurso/${idConcurso}/${devId}`)
             .then((res) => {
                 console.log(res.message)
             })
@@ -69,7 +71,7 @@ export default function User_Dev(){
 
         e.preventDefault()
 
-        axios.post(`http://localhost:3000/Postar_Trabalho_Concurso/${devId}`,trabalho)
+        axios.post(`${URLServidor}/Postar_Trabalho_Concurso/${devId}`,trabalho)
         .then((res) => {
             console.log(res)
         })

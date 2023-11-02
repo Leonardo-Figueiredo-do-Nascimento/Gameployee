@@ -1,4 +1,3 @@
-import {Link} from 'react-router-dom'
 import "./Developers.css"
 import Button from '../../components/Button'
 import Header from '../../components/Header/index.jsx'

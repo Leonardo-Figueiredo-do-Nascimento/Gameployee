@@ -4,6 +4,8 @@ import Header from "../../components/Header Companie";
 import './Companie.css'
 import axios from 'axios'
 import Button from "../../components/Button";
+import config from "../URL";
+const URLServidor = config.serverAddress
 
 export default function User_Companie(){
 
@@ -43,7 +45,7 @@ export default function User_Companie(){
 
     useEffect(()=>{
         async function getData(){
-            const response = await fetch(`http://localhost:3000/Concursos_da_empresa/${companieName}`)
+            const response = await fetch(`${URLServidor}/Concursos_da_empresa/${companieName}`)
             const data = await response.json() 
             console.log(data.dadosConcursos)
             setConcursos(data.dadosConcursos)       
@@ -53,7 +55,7 @@ export default function User_Companie(){
     
     useEffect(()=>{
         async function getData(){
-            const response = await fetch(`http://localhost:3000/Vagas_da_empresa/${companieName}`)
+            const response = await fetch(`${URLServidor}/Vagas_da_empresa/${companieName}`)
             const data = await response.json() 
             setVagas(data.dadosVagas)       
         };
@@ -67,7 +69,7 @@ export default function User_Companie(){
     const postarVaga = async (e) => {
         e.preventDefault()
         if(escolha == 'vaga'){
-            axios.post('http://localhost:3000/Postar_Vaga',vaga)
+            axios.post(`${URLServidor}/Postar_Vaga`,vaga)
             .then(response => {
                 console.log(response.data)
             })
@@ -75,7 +77,7 @@ export default function User_Companie(){
             window.location.reload()
         }
         if(escolha == 'concurso'){
-            axios.post('http://localhost:3000/Postar_Concurso',concurso)
+            axios.post(`${URLServidor}/Postar_Concurso`,concurso)
             .then(response => {
                 console.log(response.data)
             })
@@ -89,7 +91,7 @@ export default function User_Companie(){
         e.preventDefault()
         const exclusão = confirm("Quer mesmo finalizar esse concurso?")
         if(exclusão){
-            axios.delete(`http://localhost:3000/Deletar_Concurso/${id_concurso}`)
+            axios.delete(`${URLServidor}/Deletar_Concurso/${id_concurso}`)
             .then((res) => {
                 console.log(res.message)
             })
@@ -102,7 +104,7 @@ export default function User_Companie(){
         e.preventDefault()
         const exclusão = confirm("Quer mesmo finalizar essa vaga?")
         if(exclusão){
-            axios.delete(`http://localhost:3000/Deletar_Vaga/${id_vaga}`)
+            axios.delete(`${URLServidor}/Deletar_Vaga/${id_vaga}`)
             .then((res) => {
                 console.log(res.message)
             })

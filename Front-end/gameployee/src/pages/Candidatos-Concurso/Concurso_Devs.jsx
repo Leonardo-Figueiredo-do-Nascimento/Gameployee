@@ -1,18 +1,18 @@
 import Header from "../../components/Header Companie";
 import { useParams,Link } from "react-router-dom";
 import { useState , useEffect } from "react";
-import axios from 'axios'
 import "./User.css"
+import config from "../URL";
+const URLServidor = config.serverAddress
 
 export default function User_Dev(){
   
     const {companieId,companieName,idConcurso,concursoName} = useParams()
     const [dados,setDados] = useState([])
-    const [trabalhos,setTrabalhos] = useState([])  
 
     useEffect(() => {
         async function getData(){
-            const response = await fetch(`http://localhost:3000/Dados_Participantes_Concurso/${idConcurso}`);
+            const response = await fetch(`${URLServidor}/Dados_Participantes_Concurso/${idConcurso}`);
             const data = await response.json()
             console.log(data)
             console.log(data.dadosParticipantes[0])

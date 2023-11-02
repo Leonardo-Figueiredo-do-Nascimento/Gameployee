@@ -2,7 +2,8 @@ import {Link} from 'react-router-dom'
 import Header from '../../components/Header/index.jsx'
 import './Register.css'
 import { useState , useEffect } from 'react'
-
+import config from "../URL";
+const URLServidor = config.serverAddress
 
 export default function Register(){
 
@@ -64,7 +65,7 @@ export default function Register(){
         }
 
         try {
-            const response = await fetch('http://localhost:3000/Cadastro', {
+            const response = await fetch(`${URLServidor}/Cadastro`, {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
@@ -77,9 +78,9 @@ export default function Register(){
             if (response.status===200) {
                 console.log('Dados enviados com sucesso!');
                 if(dadosResposta.usuario){
-                    window.location.href = `http://localhost:5173/Usuario/Desenvolvedor/${dadosResposta.id}/${dadosResposta.nome}/${dadosResposta.cargo}`
+                    window.location.href = `/Usuario/Desenvolvedor/${dadosResposta.id}/${dadosResposta.nome}/${dadosResposta.cargo}`
                 } else if(dadosResposta.empresa){
-                    window.location.href = `http://localhost:5173/Usuario/Empresa/${dadosResposta.id}/${dadosResposta.nome}`
+                    window.location.href = `/Usuario/Empresa/${dadosResposta.id}/${dadosResposta.nome}`
                 }
             } else if(response.status===409){
               alert('Usuario e email invalidos ou já existentes');

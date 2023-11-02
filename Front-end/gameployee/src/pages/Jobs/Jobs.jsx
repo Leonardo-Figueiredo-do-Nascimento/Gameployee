@@ -2,7 +2,8 @@ import {Link,useParams} from 'react-router-dom'
 import { useState , useEffect } from 'react'
 import Header from '../../components/Header User'
 import './Jobs.css'
-
+import config from "../URL";
+const URLServidor = config.serverAddress
 
 export default function Jobs(){
     const {devId, devName} = useParams()
@@ -12,14 +13,14 @@ export default function Jobs(){
 
     useEffect(()=>{
         async function getVagas(){
-            const response = await fetch(`http://localhost:3000/Vagas`)
+            const response = await fetch(`${URLServidor}/Vagas`)
             const data = await response.json() 
             console.log(data.dadosVagas)
             setVagas(data.dadosVagas)       
         };
         getVagas()
         async function getConcursos(){
-            const response = await fetch(`http://localhost:3000/Concursos`)
+            const response = await fetch(`${URLServidor}/Concursos`)
             const data = await response.json() 
             console.log(data.dadosConcursos)
             setConcursos(data.dadosConcursos)       
