@@ -3,28 +3,53 @@ import { useParams } from "react-router-dom";
 import Header from "../../components/Header Companie";
 import './Companie.css'
 import axios from 'axios'
+import Button from "../../components/Button";
 
 export default function User_Companie(){
 
     const {companieId, companieName} = useParams()
     const [addVaga,setAddVaga] = useState(false)
-    const [tituloVaga,setTItuloVaga] = useState()
+    const [titulo,setTItulo] = useState()
     const [cargo,setCargo] = useState()
-    const [descriçãoVaga,setDescriçãoVaga] = useState()
+    const [descrição,setDescrição] = useState()
+    const [escolha,setEscolha] = useState()
     const [vaga,setVaga] = useState()
+    const [concurso,setConcurso] = useState()
+    const [concursos,setConcursos] = useState([])
     const [vagas,setVagas] = useState([])
 
     useEffect(() => {
+        if(escolha=='vaga'){
             setVaga(()=> {
                 return{
                     vaga:{
-                        titulo: tituloVaga,
+                        titulo: titulo,
                         cargo: cargo,
-                        descrição: descriçãoVaga,
+                        descrição: descrição,
                         nome_empresa: companieName
-                    }    
-    }})},[tituloVaga,cargo,descriçãoVaga,companieName]);
+                    }}})}
+        if(escolha=='concurso'){
+            setConcurso(()=>{
+                return{
+                    concurso:{
+                        titulo: titulo,
+                        cargo: cargo,
+                        descrição: descrição,
+                        nome_empresa: companieName
+                    }
+            }})
+        }},[titulo,cargo,descrição,companieName]);
 
+    useEffect(()=>{
+        async function getData(){
+            const response = await fetch(`http://localhost:3000/Concursos_da_empresa/${companieName}`)
+            const data = await response.json() 
+            console.log(data.dadosConcursos)
+            setConcursos(data.dadosConcursos)       
+        };
+        getData()
+    },[])
+    
     useEffect(()=>{
         async function getData(){
             const response = await fetch(`http://localhost:3000/Vagas_da_empresa/${companieName}`)
@@ -40,17 +65,52 @@ export default function User_Companie(){
 
     const postarVaga = async (e) => {
         e.preventDefault()
-
-        axios.post('http://localhost:3000/Postar_Vaga',vaga)
-        .then(response => {
-            console.log(response.data)
-        })
-        .catch(error => console.error(error))
-
+        if(escolha == 'vaga'){
+            axios.post('http://localhost:3000/Postar_Vaga',vaga)
+            .then(response => {
+                console.log(response.data)
+            })
+            .catch(error => console.error(error)) 
+            window.location.reload()
+        }
+        if(escolha == 'concurso'){
+            axios.post('http://localhost:3000/Postar_Concurso',concurso)
+            .then(response => {
+                console.log(response.data)
+            })
+            .catch(error => console.error(error))
+            window.location.reload()
+        }
         setAddVaga(false)
         setVaga()
     }
-
+    const excluirConcurso = async (e,id_concurso) =>{
+        e.preventDefault()
+        const exclusão = confirm("Quer mesmo excluir esse concurso?")
+        if(exclusão){
+            axios.delete(`http://localhost:3000/Deletar_Concurso/${id_concurso}`)
+            .then((res) => {
+                console.log(res.message)
+            })
+            .catch((err) => console.error(err));
+            window.location.reload()
+        } else{
+            return;
+    }}
+    const excluirVaga = async (e,id_vaga) =>{
+        e.preventDefault()
+        const exclusão = confirm("Quer mesmo excluir essa vaga?")
+        if(exclusão){
+            axios.delete(`http://localhost:3000/Deletar_Vaga/${id_vaga}`)
+            .then((res) => {
+                console.log(res.message)
+            })
+            .catch((err) => console.error(err));
+            window.location.reload()
+        } else{
+            return;
+        }
+    }
     return(
         <>
             <Header/>
@@ -59,23 +119,44 @@ export default function User_Companie(){
                 <p className="visible-elements">Suas Vagas:</p>
                 <section className="painel-vagas">
                     {
-            
+                        concursos.map((concurso,index)=>{
+                            return (
+                            <div id='concurso' key={index}>    
+                                <div className="concurso-renderizado">
+                                    <p id="p-titulo-concurso">{concurso.titulo_concurso}</p>
+                                    <p id="p-cargo-concurso">{concurso.cargo}</p>
+                                    <p id="p-descricao-concurso">{concurso.descrição}</p>
+                                </div>
+                                <div className="bt_opcoesConcurso">
+                                        <Button id='bt_candidatos' title='Candidatos' to={`/Usuario/Empresa/${companieId}/${companieName}/Concurso/${concurso.id_concurso}/${concurso.titulo_concurso}`}></Button>
+                                        <button id="botão-exclusão" onClick={(e)=>excluirConcurso(e,concurso.id_concurso)}>Finalizar</button>
+                                </div>
+                            </div>)
+                        })
+                    }
+                    {   
                         vagas.map((vaga,index)=>{
                             return (
-                            <div className="vaga-renderizada" key={index}>
-                                <p id="p-titulo-vaga">{vaga.titulo}</p>
-                                <p id="p-cargo-vaga">{vaga.cargo}</p>
-                                <p id="p-descricao-vaga">{vaga.descrição}</p>
+                            <div id='vaga' key={index}>
+                                <div className="vaga-renderizada" >
+                                    <p id="p-titulo-vaga">{vaga.titulo}</p>
+                                    <p id="p-cargo-vaga">{vaga.cargo}</p>
+                                    <p id="p-descricao-vaga">{vaga.descrição}</p>
+                                </div>
+                                <div className="bt_opcoesConcurso">
+                                    <button id="botão-exclusão" onClick={(e)=>excluirVaga(e,vaga.id_vaga)}>Finalizar</button>
+                                </div>
                             </div>)
                         })
                     }
                 </section>
-                <button className="visible-elements" onClick={() => setAddVaga(!addVaga)}>Adicionar Vaga</button>
+                <button className="visible-elements" onClick={() => {setAddVaga(!addVaga); setEscolha('vaga')}}>Adicionar Vaga</button>
+                <button className="visible-elements" onClick={() => {setAddVaga(!addVaga); setEscolha('concurso')}}>Adicionar Concurso</button>
                 {addVaga ? (
                     <>
                         <form onSubmit={postarVaga}>
-                            <label>Titulo da Vaga:</label>
-                            <input type={"text"} onChange={(e)=> setTItuloVaga(e.target.value)} required/>
+                            <label>Titulo:</label>
+                            <input type={"text"} onChange={(e)=> setTItulo(e.target.value)} required/>
                             <label>Cargo</label>
                             <div className='carreiras'>
                             <input type="radio" id="carreira1" name="carreira" value="Programador" onChange={(e)=> setCargo("Programador")} required/>
@@ -91,13 +172,12 @@ export default function User_Companie(){
                                 <label>Animador</label>
                             </div>
                             <label>Descrição:</label>
-                            <input id='input-descrição' type={"text"} onChange={(e)=> setDescriçãoVaga(e.target.value)} required/>
+                            <input id='input-descrição' type={"text"} onChange={(e)=> setDescrição(e.target.value)} required/>
                             <input type="submit" value="Postar" />
                         </form>
                     </>
                 ) : null}
             </div>
-            
         </>
     )
 }

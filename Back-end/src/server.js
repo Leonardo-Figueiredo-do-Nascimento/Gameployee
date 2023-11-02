@@ -2,8 +2,8 @@ const Desenvolvedor = require('./Users/Devs.js');
 const Empresa = require('./Users/Empresa.js');
 const Vaga = require('./Users/Vagas.js');
 const Trabalho = require('./Users/Trabalhos.js');
-const { buscarCandidatos, inserirDesenvolvedor, logarDev , buscarTrabalhos, inserirTrabalho, deletarTrabalho, buscarTelefone, mudarTelefone, buscarDadosCandidato} = require('./db/UsuarioDAO.js')
-const { inserirEmpresa, buscarVagas , inserirVaga, logarEmpresa, buscarVagasLocais } = require('./db/EmpresaDAO.js')
+const { buscarCandidatos,inserirDesenvolvedor,logarDev,buscarTrabalhos,buscarTrabalhoConcurso,inserirTrabalho, deletarTrabalho, buscarTelefone, mudarTelefone, buscarDadosCandidato, deletarTrabalhoConcurso,inserirTrabalhoConcurso, buscarParticipantesConcurso} = require('./db/UsuarioDAO.js')
+const { inserirEmpresa,buscarVagas,inserirVaga,logarEmpresa,inserirConcurso,buscarVagasLocais,buscarConcursos,buscarConcursosLocais, deletarVaga, deletarConcurso, buscarDadosConcurso } = require('./db/EmpresaDAO.js')
 const express = require('express');
 const cors = require('cors');
 const server = express();
@@ -106,11 +106,23 @@ server.post('/Postar_Vaga', (req, res) => {
             console.log('DADOS ENVIADOS');
             console.log("Nova vaga criada: ", novaVaga);
             res.json({ message: 'Vaga criada com sucesso', vaga: novaVaga, titulo: novaVaga.titulo, descrição: novaVaga.descricao, nome_empresa: novaVaga.nome_empresa });
-    
         }
     })
-
 });
+
+server.post('/Postar_Concurso', (req, res) => {
+    const data = req.body
+    const {titulo,cargo,descrição,nome_empresa} = data.concurso
+    inserirConcurso(titulo, cargo, descrição,nome_empresa,(err)=>{
+        if(err){
+            console.log("Erro ao enviar os dados = " + err.message);
+            res.json({ error: err.message });
+        } else{
+            console.log('DADOS ENVIADOS');
+            res.json({ message: 'Vaga criada com sucesso', titulo: titulo, descrição: descrição, nome_empresa: nome_empresa });
+        }
+    })
+}); 
 
 server.get('/Vagas',(req,res)=>{
     buscarVagas(async (err,result)=>{
@@ -124,7 +136,30 @@ server.get('/Vagas',(req,res)=>{
         }
     })
 })
-
+server.get('/Concursos',(req,res)=>{
+    buscarConcursos(async (err,result)=>{
+        if(err || result.rowCount == 0){
+            res.json(err)
+        }else if(result.rowCount >= 1){
+            const dadosConcursos = await result.rows
+            console.log(dadosConcursos)
+            console.log("Todas as vagas divulgadas")
+            res.json({ message: 'Vagas enviadas', dadosConcursos: dadosConcursos});
+        }
+    })
+})
+server.get('/Dados_Concurso/:id',(req,res)=>{
+    const idConcurso = req.params.id
+    buscarDadosConcurso(idConcurso,async (err,result)=>{
+        if(err || result.rowCount == 0){
+            res.json(err)
+        }else if(result.rowCount >= 1){
+            const dadosConcurso = await result.rows
+            console.log(dadosConcurso)
+            res.json({ message: 'Vagas enviadas', dadosConcurso: dadosConcurso});
+        }
+    })
+})
 // GET das vagas da Empresa local 
 server.get('/Vagas_da_empresa/:nome',(req,res)=>{
     const nomeEmpresa = req.params.nome
@@ -143,6 +178,23 @@ server.get('/Vagas_da_empresa/:nome',(req,res)=>{
     })
 })
 
+server.get('/Concursos_da_empresa/:nome',(req,res)=>{
+    const nomeEmpresa = req.params.nome
+    buscarConcursosLocais(nomeEmpresa,async (err,result)=>{
+        if(err || result.rowCount == 0){
+            console.log('Sem concursos ainda');
+        }else if(result.rowCount >= 1){
+            const dadosConcursos = await result.rows
+            console.log(dadosConcursos)
+            console.log(dadosConcursos.titulo)
+            console.log(dadosConcursos.cargo)
+            console.log(dadosConcursos.descrição)
+            console.log("Todas as vagas divulgadas")
+            res.json({ message: 'Vagas enviadas', dadosConcursos: dadosConcursos});
+        }
+    })
+})
+
 // GET de CANDIDATOS
 server.get('/Candidatos',(req,res)=>{
     buscarCandidatos(async (err,result)=>{
@@ -156,7 +208,6 @@ server.get('/Candidatos',(req,res)=>{
         }
     })
 })
-
 server.get('/Dados_Candidato/:id',(req,res)=>{
     const idUsuario = req.params.id
 
@@ -171,8 +222,7 @@ server.get('/Dados_Candidato/:id',(req,res)=>{
         }
     })
 })
-
-// POST DE TRABALHOS DO USUARIO Verdadeiro
+// POST DE TRABALHOS DO USUARIO 
 server.post('/Postar_Trabalho/:id', (req, res) => {
     const idUsuario = req.params.id
     const data = req.body
@@ -189,8 +239,22 @@ server.post('/Postar_Trabalho/:id', (req, res) => {
             res.json({ message: 'Trabalho postado com sucesso', trabalho: novoTrabalho, titulo: novoTrabalho.titulo, trabalho_link: novoTrabalho.trabalho_link });
         }
     })
-});   
-
+});
+server.post('/Postar_Trabalho_Concurso/:id', (req, res) => {
+    const idUsuario = req.params.id
+    const data = req.body
+    console.log('Dados recebidos no servidor:', data);
+    inserirTrabalhoConcurso(data,(err)=>{
+        if(err){
+            console.log("Erro ao enviar os dados = " + err.message);
+            res.json({ error: err.message });
+        } else{
+            console.log('DADOS ENVIADOS');
+            console.log("Novo trabalho postado: ", data);
+            res.json({ message: 'Trabalho postado com sucesso', trabalho: data, titulo: data.titulo, trabalho_link: data.trabalho_link });
+        }
+    })
+});
 server.get('/Trabalhos_usuario/:id', (req, res) => {
     const idUsuario = req.params.id
     buscarTrabalhos(idUsuario,async (err,result)=>{
@@ -204,7 +268,20 @@ server.get('/Trabalhos_usuario/:id', (req, res) => {
         }
     })
 }); 
-
+server.get('/Trabalho_usuario_concurso/:id/:id2', (req, res) => {
+    const idUsuario = req.params.id
+    const idConcurso = req.params.id2
+    buscarTrabalhoConcurso(idUsuario,idConcurso,async (err,result)=>{
+        if(err || result.rowCount == 0){
+            res.json(err)
+        }else if(result.rowCount >= 1){
+            const dadosTrabalho = await result.rows
+            console.log(dadosTrabalho)
+            console.log("Todos os trabalhos enviados")
+            res.json({message:'Todos os trabalhos',dadosTrabalho: dadosTrabalho});
+        }
+    })
+}); 
 server.get('/Telefone/:id',(req,res)=>{
     const idUsuario = req.params.id
     buscarTelefone(idUsuario, async (err,result)=>{
@@ -232,7 +309,6 @@ server.patch('/Mudar_Telefone/:id/:novoTelefone',(req,res)=>{
         }
     })
 })
-
 server.delete('/Deletar_Trabalho/:idTrabalho',(req,res)=>{
     const idTrabalho = req.params.idTrabalho
     deletarTrabalho(idTrabalho,async (err,result)=>{
@@ -243,6 +319,53 @@ server.delete('/Deletar_Trabalho/:idTrabalho',(req,res)=>{
             res.status(200).json({ message: 'Trabalho excluído com sucesso.' });
         }
     })
+})
+server.delete('/Deletar_Trabalho_Concurso/:idConcurso/:idUsuario',(req,res)=>{
+    const idUsuario = req.params.idUsuario
+    const idConcurso = req.params.idConcurso
+    console.log(idUsuario)
+    console.log(idConcurso)
+    deletarTrabalhoConcurso(idUsuario,idConcurso,async (err,result)=>{
+        if(err){
+            res.json(err)
+        } else{
+            console.log("Trabalho excluído com sucesso.");
+            res.status(200).json({ message: 'Trabalho excluído com sucesso.'});
+        }
+    })
+})
+server.delete('/Deletar_Concurso/:idConcurso',(req,res)=>{
+    const idConcurso = req.params.idConcurso
+    deletarConcurso(idConcurso,async (err,result)=>{
+        if(err){
+            res.json(err)
+        } else{
+            console.log("Concurso excluído com sucesso.");
+            res.status(200).json({ message: 'Concurso excluído com sucesso.' });
+        }
+    })
+})
+server.delete('/Deletar_Vaga/:idVaga',(req,res)=>{
+    const idVaga = req.params.idVaga
+    deletarVaga(idVaga,async (err,result)=>{
+        if(err){
+            res.json(err)
+        } else{
+            console.log("Vaga excluída com sucesso.");
+            res.status(200).json({ message: 'Vaga excluída com sucesso.' });
+        }
+    })
+})
+server.get('/Dados_Participantes_Concurso/:id',(req,res)=>{
+    const idConcurso = req.params.id
+    buscarParticipantesConcurso(idConcurso, async (err,result)=>{
+        if(err || result.rowCount == 0){
+            res.json(err)
+        }else if(result.rowCount >= 1){
+            const dadosParticipantes = await result.rows
+            console.log(dadosParticipantes)
+            res.json({message:'Todos os trabalhos',dadosParticipantes:dadosParticipantes});
+    }})
 })
 
 server.listen(port,()=>{

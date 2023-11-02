@@ -39,19 +39,54 @@
     padding: 20px;
     border: 3px solid black;
 }
+.concursos-renderizadas{
+    height: auto;
+    width: 400px;
+    background-color: rgb(224, 87, 59);
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    padding: 20px;
+    border: 3px solid black;
+}
 
-#p3-titulo-vaga{
+#p3-titulo-vaga,#p3-titulo-concurso{
     height: auto;
     width: auto;
 }
-#p2-cargo-vaga{height: auto;
+#p2-cargo-vaga,#p2-cargo-concurso,#p1-email-vaga,#p1-email-concurso{
+    height: auto;
     width: auto;
     font-size: 25px;
     text-decoration: underline;
     margin-top: 8px;
     margin-bottom: 8px;
 }
-#p1-descricao-vaga{height: auto;
+#p1-descricao-vaga,#p2-email-vaga,#p2-email-concurso,#p1-descricao-concurso{
+    height: auto;
     width: auto;
     font-size: 20px;
+}
+#bt_participe{
+    height: 4rem;
+    width: 100px;
+    margin: 10px;
+    border-radius: 20px;
+    border: 2px solid white;
+    background-color: black;
+    color: white;
+    font-size: 1.2rem;
+    padding: 0.8rem;
+    padding-top: 1rem;
+    cursor: pointer;
+    font-family: sans-serif;
+}
+#bt_participe:hover{
+    background-color: white;
+    color: black;
+    transition: 0.5s;
+    
 }
