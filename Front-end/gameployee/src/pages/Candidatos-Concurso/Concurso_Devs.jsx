@@ -1,12 +1,12 @@
 import Header from "../../components/Header Companie";
-import { useParams } from "react-router-dom";
+import { useParams,Link } from "react-router-dom";
 import { useState , useEffect } from "react";
 import axios from 'axios'
 import "./User.css"
 
 export default function User_Dev(){
   
-    const {idConcurso,concursoName} = useParams()
+    const {companieId,companieName,idConcurso,concursoName} = useParams()
     const [dados,setDados] = useState([])
     const [trabalhos,setTrabalhos] = useState([])  
 
@@ -33,14 +33,23 @@ export default function User_Dev(){
                     {
                         dados.length > 0 ? (
                             dados.map((dado, index) => (
+                            <>
+                                <div id='nome-participante'>
+                                    <Link to={`/Usuario/Empresa/${companieId}/${companieName}/Candidatos/${dado.id_usuario}`} id='cp-nome'>{dado.nome}</Link>
+                                </div>
                                 <div className="cp-trabalho" key={index}>
                                     <div className="cp-trabalho-renderizado" >
                                         <p id={'cp-titulo-trabalho'}>{dado.titulo}</p>
                                     </div>
-                                    <div className="cp-bt_opcoesTrabalho">
+                                    <div className="cp-participante-renderizado" >
+                                        <p id={'cp-email-participante'}>Email: {dado.email}</p>
+                                        <p id={'cp-telefone-participante'}>Telefone: {dado.telefone}</p>
+                                    </div>
+                                    <div className="cp-bt_opcoesTrabalho-concurso">
                                         <a target={"_blank"} href={dado.trabalho_link} id="cp-bt_linkTrabalho">Acessar Trabalho</a>
                                     </div>
                                 </div>
+                            </>
                             ))
                         ) : (
                             <p>Nenhum candidato ainda.</p>

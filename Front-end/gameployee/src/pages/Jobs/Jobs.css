@@ -60,10 +60,22 @@
 #p2-cargo-vaga,#p2-cargo-concurso,#p1-email-vaga,#p1-email-concurso{
     height: auto;
     width: auto;
-    font-size: 25px;
+    font-size: 2rem;
     text-decoration: underline;
     margin-top: 8px;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
+}
+#p2-nome-empresa-vaga,#p2-nome-empresa-concurso{
+    height: auto;
+    width: auto;
+    font-size: 2rem;
+    color: white;
+    background-color: black;
+    border: 3px solid black;
+    border-radius: 10px;
+    padding: 10px;
+    margin-top: 8px;
+    margin-bottom: 10px;
 }
 #p1-descricao-vaga,#p2-email-vaga,#p2-email-concurso,#p1-descricao-concurso{
     height: auto;

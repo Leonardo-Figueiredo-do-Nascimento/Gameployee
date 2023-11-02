@@ -116,7 +116,7 @@ export default function User_Dev(){
                             <input type={'submit'} value='Publicar'/>
                         </div>
                     </form>
-                ):(<p style={{marginLeft:"30%"}}>Trabalho enviado, aguarde a avaliação da empresa.</p>)}
+                ):(<p style={{marginLeft:"30%",width:"auto"}}>Trabalho enviado, aguarde a avaliação da empresa.</p>)}
             </div>
         </>
     )

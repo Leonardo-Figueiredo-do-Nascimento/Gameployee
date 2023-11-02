@@ -52,8 +52,8 @@ async function buscarDadosConcurso(id_concurso,callback){
     pool.query(query,[id_concurso],callback)
 }
 async function buscarConcursos(callback){
-    const query = 'SELECT id_concurso,titulo_concurso,cargo,descrição FROM tb_concursos '+
-                  'LEFT JOIN tb_empresas ON tb_concursos.nome_empresa = tb_empresas.nome_empresa '
+    const query = 'SELECT id_concurso,titulo_concurso,cargo,descrição,te.nome_empresa FROM tb_concursos '+
+                  'LEFT JOIN tb_empresas te ON tb_concursos.nome_empresa = te.nome_empresa '
     pool.query(query,callback)
 }
 async function buscarVagasLocais(nome_empresa,callback){

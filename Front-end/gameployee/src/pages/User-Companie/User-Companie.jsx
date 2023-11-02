@@ -9,6 +9,7 @@ export default function User_Companie(){
 
     const {companieId, companieName} = useParams()
     const [addVaga,setAddVaga] = useState(false)
+    const [addConcurso,setAddConcurso] = useState(false)
     const [titulo,setTItulo] = useState()
     const [cargo,setCargo] = useState()
     const [descrição,setDescrição] = useState()
@@ -86,7 +87,7 @@ export default function User_Companie(){
     }
     const excluirConcurso = async (e,id_concurso) =>{
         e.preventDefault()
-        const exclusão = confirm("Quer mesmo excluir esse concurso?")
+        const exclusão = confirm("Quer mesmo finalizar esse concurso?")
         if(exclusão){
             axios.delete(`http://localhost:3000/Deletar_Concurso/${id_concurso}`)
             .then((res) => {
@@ -99,7 +100,7 @@ export default function User_Companie(){
     }}
     const excluirVaga = async (e,id_vaga) =>{
         e.preventDefault()
-        const exclusão = confirm("Quer mesmo excluir essa vaga?")
+        const exclusão = confirm("Quer mesmo finalizar essa vaga?")
         if(exclusão){
             axios.delete(`http://localhost:3000/Deletar_Vaga/${id_vaga}`)
             .then((res) => {
@@ -116,7 +117,7 @@ export default function User_Companie(){
             <Header/>
             <h1 id="nome-empresa">{companieName}</h1>
             <div className="empresa-container">
-                <p className="visible-elements">Suas Vagas:</p>
+                <p className="visible-elements">Suas vagas e concursos:</p>
                 <section className="painel-vagas">
                     {
                         concursos.map((concurso,index)=>{
@@ -150,9 +151,11 @@ export default function User_Companie(){
                         })
                     }
                 </section>
-                <button className="visible-elements" onClick={() => {setAddVaga(!addVaga); setEscolha('vaga')}}>Adicionar Vaga</button>
-                <button className="visible-elements" onClick={() => {setAddVaga(!addVaga); setEscolha('concurso')}}>Adicionar Concurso</button>
-                {addVaga ? (
+                <div id="bts-add">
+                    <button className="visible-elements" onClick={() => {setAddVaga(!addVaga);setAddConcurso(false); setEscolha('vaga')}}>Adicionar Vaga</button>
+                    <button className="visible-elements" onClick={() => {setAddVaga(false);setAddConcurso(!addConcurso); setEscolha('concurso')}}>Adicionar Concurso</button>
+                </div>
+                {addVaga || addConcurso ? (
                     <>
                         <form onSubmit={postarVaga}>
                             <label>Titulo:</label>

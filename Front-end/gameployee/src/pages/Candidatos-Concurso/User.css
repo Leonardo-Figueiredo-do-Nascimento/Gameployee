@@ -39,7 +39,23 @@
     display: flex;
     flex-direction: column;
 }
+#nome-participante{
+    height: 3rem;
+    background-color: black;
+    color: white;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid white;
+    margin-bottom: 10px;
+}
 
+#cp-nome{
+    width: auto;
+    height: auto;
+    font-size: 1.8rem;
+}
 .cp-trabalho-renderizado{
     display: flex;
     flex-direction: column;
@@ -51,7 +67,18 @@
     border: 5px solid black;
     cursor: pointer;
 }
-
+.cp-participante-renderizado{
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    background-color: aliceblue;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    border-radius: 20px;
+    margin-left: 1%;
+    border: 5px solid black;
+}
 .cp-trabalho{
     height: auto;
     width: auto;
@@ -59,15 +86,22 @@
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
+    margin-bottom: 2%;
 }
 
+#cp-email-participante,#cp-telefone-participante{
+    height: auto;
+    width: auto;
+    font-size: 1.4rem;
+}
 #cp-titulo-trabalho{
     height: auto;
     width: auto;
     font-size: 1.8rem;
 }
-.cp-bt_opcoesTrabalho{
+.cp-bt_opcoesTrabalho-concurso{
     height: auto;
+    width: auto;
     display: flex;
     justify-content: end;
 }

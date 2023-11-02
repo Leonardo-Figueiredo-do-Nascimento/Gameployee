@@ -61,6 +61,7 @@ export default function Jobs(){
                             if(cargosEscolhidos.includes(vaga.cargo)){
                                 return (
                                 <div className="vagas-renderizadas" key={index}>
+                                    <p id="p2-nome-empresa-vaga">{vaga.nome_empresa}</p>
                                     <p id="p3-titulo-vaga">{vaga.titulo}</p>
                                     <p id="p2-cargo-vaga">{vaga.cargo}</p>
                                     <p id="p1-descricao-vaga">{vaga.descrição}</p>
@@ -75,6 +76,7 @@ export default function Jobs(){
                             if(cargosEscolhidos.includes(concurso.cargo)){
                                 return (
                                 <div className="concursos-renderizadas" key={index}>
+                                    <p id="p2-nome-empresa-concurso">{concurso.nome_empresa}</p>
                                     <p id="p3-titulo-concurso">{concurso.titulo_concurso}</p>
                                     <p id="p2-cargo-concurso">{concurso.cargo}</p>
                                     <p id="p1-descricao-concurso">{concurso.descrição}</p>
