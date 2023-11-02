@@ -18,7 +18,7 @@ server.post('/Cadastro',(req,res)=>{
 
     if(data.usuario){
         const {nome,email,senha,cargo,telefone} = data.usuario
-        const novoUsuario = new Desenvolvedor(nome,cargo,email,senha,telefone)
+        const novoUsuario = new Desenvolvedor(nome,email,senha,cargo,telefone)
         
         inserirDesenvolvedor(novoUsuario,(err)=>{
             if(err){
